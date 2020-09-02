@@ -8,7 +8,7 @@ setup(
     maintainer='Pavan Chaggar',
     maintainer_email='pavanjit.chaggar@maths.ox.ac.uk',
     include_package_data=True,
-    packages = find_packages(include=('src', 'src.*')),
+    packages = find_packages(include=('netwin', 'netwin.*')),
     install_requires=[
         'numpy',
         'matplotlib',
