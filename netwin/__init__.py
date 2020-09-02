@@ -1,1 +1,3 @@
-# init.py for src
+# init.py for netwin
+
+from .networks import adjacency_matrix
