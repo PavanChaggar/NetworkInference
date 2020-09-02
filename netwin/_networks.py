@@ -33,7 +33,7 @@ def degree_matrix(adjacency_matrix):
     D = np.diag([np.sum(A[i]) for i in range(len(A))]) 
     return D
 
-def graph_Laplacian():
+def graph_Laplacian(A, D=np.array([])):
     """Function to generate the graph Laplacian from adjacency matrix
     args: 
         graph : array/matrix 
@@ -43,7 +43,12 @@ def graph_Laplacian():
     Laplacian   square array containing the positive graph Laplacian given by L = D - A, where D is 
                 degree matrix and A is the adjacency matrix
     """
-    pass
-
+ 
+    if D.any():
+        L = D - A
+    elif not D.any():
+        D = degree_matrix(A) 
+        L = D - A    
+    return L
 
 
