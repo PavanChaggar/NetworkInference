@@ -2,5 +2,9 @@
 
 env/
 
+netwin/__pycache__/
+
+tests/__pycache__/
+
 #vscode 
 .vscode/
