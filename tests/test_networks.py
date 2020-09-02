@@ -30,3 +30,13 @@ class Test_Network(unittest.TestCase):
         L_d = nw.graph_Laplacian(A=self.A, D=self.D)
         n = len(L)
         assert L.shape == (n, n)
+        assert np.sum(L) == 0
+        assert np.sum(L - np.diag(np.diagonal(L))) < 0
+        assert -np.sum(L - np.diag(np.diagonal(L))) == np.sum(self.A)
+
+        n = len(L_d)
+
+        assert L_d.shape == (n, n)
+        assert np.sum(L_d) == 0
+        assert np.sum(L_d - np.diag(np.diagonal(L_d))) < 0
+        assert -np.sum(L_d - np.diag(np.diagonal(L_d))) == np.sum(self.A)
