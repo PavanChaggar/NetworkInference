@@ -20,7 +20,7 @@ def adjacency_matrix(graph_path: str):
     return A
 
 def degree_matrix(adjacency_matrix): 
-    """Function calculate degree matric from adjacency matric, A 
+    """Function to calculate degree matric from adjacency matric, A 
     args: 
         A : array/matrix
             square array containing the adjacency matrix 
@@ -50,5 +50,3 @@ def graph_Laplacian(A, D=np.array([])):
         D = degree_matrix(A) 
         L = D - A    
     return L
-
-
