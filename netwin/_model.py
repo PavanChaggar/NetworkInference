@@ -1,6 +1,7 @@
 """ script containing class and functions for modelling, integrating etc
 """ 
 import netwin as nw
+from scipy.integrate import odeint
 
 class Model(object): 
     
@@ -22,5 +23,5 @@ class Model(object):
         elif model_choice == 'fkpp':
             pass 
 
-    def solve(self, model, u0, t, params):
+    def solve(self, u0, t, params):
         return odeint(self.f, u0, t, args=(params,))
