@@ -16,18 +16,11 @@ class Model(object):
         self.f, self.which_model = self._models(model_choice = self.which_model)
 
     def _models(self, model_choice: str): 
-        #print(model_choice)
         if model_choice == 'network_diffusion': 
             f = nw.network_diffusion
             return f, model_choice
         elif model_choice == 'fkpp':
             pass 
-
-    #def _network_diffusion(self, u0, t, params):
-    #    p = u0
-    #    L, k = params
-    #    du = k * (-L @ p)
-    #    return du
 
     def solve(self, model, u0, t, params):
         return odeint(self.f, u0, t, args=(params,))
