@@ -13,7 +13,7 @@ class TestModel(unittest.TestCase):
     network_path = os.path.join(root_dir, 'data/brain_networks/scale1.csv')
     
     def test_init(self):
-        m = nw.Model(network_path = self.network_path, model_name='diffusion')
+        m = nw.Model(network_path = self.network_path, model_name='network_diffusion')
 
 if __name__ == '__main__':
     unittest.main()
