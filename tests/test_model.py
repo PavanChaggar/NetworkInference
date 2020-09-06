@@ -18,6 +18,7 @@ class TestModel(unittest.TestCase):
     t = np.linspace(0, 1, 100)
     u0 = np.ones((83))
     k = 1.0 
+    a = 1.0
 
     def test_init(self):
         """Test initialisation of model class
@@ -51,6 +52,18 @@ class TestModel(unittest.TestCase):
         # check that f returns an array as expected
         assert u.shape == (n,)
         assert np.all(u!=self.u0)
+
+        m = nw.Model(network_path = self.network_path, model_name='fkpp')
+        assert m.which_model == 'fkpp' 
+        
+        params = m.L, self.k, self.a
+        
+        u2 = m.f(self.u0, self.t, params)
+
+        # check that f returns an array as expected
+        assert u2.shape == (n,)
+        assert np.all(u2!=self.u0)
+
 
     def test_solve(self): 
         """Test solver for network diffusion model

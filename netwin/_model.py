@@ -42,7 +42,8 @@ class Model(object):
             f = nw.network_diffusion
             return f, model_choice
         elif model_choice == 'fkpp':
-            pass 
+            f = nw.network_fkpp
+            return f, model_choice 
 
     def solve(self, u0, t, params):
         """Function to use odeint to sovle network models 

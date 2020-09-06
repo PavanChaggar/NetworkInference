@@ -21,10 +21,10 @@ def network_diffusion(u0, t, params):
     """
     p = u0
     L, k = params
-    du = k * (np.matmuk(-L, p))
+    du = k * (np.matmul(-L, p))
     return du
 
-def network_fkpp_np(u0, t, params):
+def network_fkpp(u0, t, params):
     """Function to implement the network Fisher-Kolmogorov–Petrovsky–Piskunov
     args: 
         u0 : array  
