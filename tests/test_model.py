@@ -18,6 +18,7 @@ class TestModel(unittest.TestCase):
     t = np.linspace(0, 1, 100)
     u0 = np.ones((83))
     k = 1.0 
+    a = 1.0
 
     def test_init(self):
         """Test initialisation of model class
@@ -52,13 +53,47 @@ class TestModel(unittest.TestCase):
         assert u.shape == (n,)
         assert np.all(u!=self.u0)
 
-    def test_solve(self): 
+        m = nw.Model(network_path = self.network_path, model_name='fkpp')
+        assert m.which_model == 'fkpp' 
+        
+        params = m.L, self.k, self.a
+        
+        u2 = m.f(self.u0, self.t, params)
+
+        # check that f returns an array as expected
+        assert u2.shape == (n,)
+        assert np.all(u2!=self.u0)
+
+
+    def test_solve_diffusion(self): 
         """Test solver for network diffusion model
         """
         #Instantiate class
         m = nw.Model(network_path = self.network_path, model_name='network_diffusion')
         # pack parameters and solve for initial values
         params = m.L, self.k
+        sol = m.solve(self.u0, self.t, params)
+        
+        # test the shape of the solution and solution is as expected
+        assert sol.shape == (len(self.t),len(m.A))
+        assert sol[0,:].all() == sol[-1,:].all()
+
+        # set up a different problem with non-uniform initial conditions
+        u0_2 = np.ones((len(m.A)))
+        u0_2[30] = 10.0 
+        sol_2 = m.solve(u0_2, self.t, params)
+        
+        # test the solution for the two solutions are different as expected
+        assert np.all(sol[0,:]==sol_2[0,:]) == False
+        assert np.all(sol_2[0,:]!=sol_2[-1,:])
+
+    def test_solve_fkpp(self): 
+        """Test solver for network fkpp model
+        """
+        #Instantiate class
+        m = nw.Model(network_path = self.network_path, model_name='fkpp')
+        # pack parameters and solve for initial values
+        params = m.L, self.k, self.a
         sol = m.solve(self.u0, self.t, params)
         
         # test the shape of the solution and solution is as expected
