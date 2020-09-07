@@ -1,6 +1,8 @@
 """ script containing class and functions for modelling, integrating etc
 """ 
 import netwin as nw
+from netwin._inference import * 
+from ._model_library import *
 from scipy.integrate import odeint
 
 class Model(object): 
@@ -39,10 +41,10 @@ class Model(object):
                        return string containing the function set to f
         """
         if model_choice == 'network_diffusion': 
-            f = nw.network_diffusion
+            f = network_diffusion
             return f, model_choice
         elif model_choice == 'fkpp':
-            f = nw.network_fkpp
+            f = network_fkpp
             return f, model_choice 
 
     def solve(self, u0, t, params):
