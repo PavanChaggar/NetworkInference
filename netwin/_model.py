@@ -28,6 +28,8 @@ class Model(object):
 
         self.f, self.which_model = self._models(model_choice = self.which_model)
 
+        self.infer == None
+
     def _models(self, model_choice: str): 
         """HoF to set model variable based on user choice 
            Presently only network diffusion is implemented 
@@ -62,3 +64,22 @@ class Model(object):
         """
         return odeint(self.f, u0, t, args=(params,))
 
+    def infer(self,inference_scheme):
+        """function to set inference class given by a particular inference scheme
+        args : 
+            inference scheme : str
+                               string object with one of the following options: 
+                               'mcmc'
+                               'vb'
+                               'sbi'
+        returns : 
+                   inference : class 
+                               returns class object corresponding to infernce scheme chosen
+        """
+        if inference_scheme == 'mcmc': 
+            pass 
+        if inference_scheme == 'vb':
+            pass 
+        if inference_scheme == 'sbi':
+            pass
+    
