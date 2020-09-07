@@ -47,7 +47,7 @@ class Model(object):
             f = network_fkpp
             return f, model_choice 
 
-    def solve(self, u0, t, params):
+    def simulate(self, u0, t, params):
         """Function to use odeint to sovle network models 
         args: 
                u0 : array  
@@ -61,3 +61,4 @@ class Model(object):
                     solution to differential equation at times t 
         """
         return odeint(self.f, u0, t, args=(params,))
+

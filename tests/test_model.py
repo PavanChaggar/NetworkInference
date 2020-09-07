@@ -72,7 +72,7 @@ class TestModel(unittest.TestCase):
         m = nw.Model(network_path = self.network_path, model_name='network_diffusion')
         # pack parameters and solve for initial values
         params = m.L, self.k
-        sol = m.solve(self.u0, self.t, params)
+        sol = m.simulate(self.u0, self.t, params)
         
         # test the shape of the solution and solution is as expected
         assert sol.shape == (len(self.t),len(m.A))
@@ -81,7 +81,7 @@ class TestModel(unittest.TestCase):
         # set up a different problem with non-uniform initial conditions
         u0_2 = np.ones((len(m.A)))
         u0_2[30] = 10.0 
-        sol_2 = m.solve(u0_2, self.t, params)
+        sol_2 = m.simulate(u0_2, self.t, params)
         
         # test the solution for the two solutions are different as expected
         assert np.all(sol[0,:]==sol_2[0,:]) == False
@@ -94,7 +94,7 @@ class TestModel(unittest.TestCase):
         m = nw.Model(network_path = self.network_path, model_name='fkpp')
         # pack parameters and solve for initial values
         params = m.L, self.k, self.a
-        sol = m.solve(self.u0, self.t, params)
+        sol = m.simulate(self.u0, self.t, params)
         
         # test the shape of the solution and solution is as expected
         assert sol.shape == (len(self.t),len(m.A))
@@ -103,7 +103,7 @@ class TestModel(unittest.TestCase):
         # set up a different problem with non-uniform initial conditions
         u0_2 = np.ones((len(m.A)))
         u0_2[30] = 10.0 
-        sol_2 = m.solve(u0_2, self.t, params)
+        sol_2 = m.simulate(u0_2, self.t, params)
         
         # test the solution for the two solutions are different as expected
         assert np.all(sol[0,:]==sol_2[0,:]) == False
