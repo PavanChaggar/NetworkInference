@@ -4,7 +4,12 @@ env/
 
 netwin/__pycache__/
 
+netwin/_inference/__pycache__/
+
 tests/__pycache__/
+
+netwin.egg-info/
 
 #vscode 
 .vscode/
+
