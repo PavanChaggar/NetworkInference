@@ -48,10 +48,18 @@ class VB(object):
 
         return params, theta_n
 
-class mcmc(object):
+class MCMC(object):
     pass 
 
-class sbi(object):
+class SBI(object):
     pass
 
+
+def set_inference(inference_scheme: str):
+    inference_map = {
+        "vb": VB(), 
+        "mcmc": MCMC(),
+        "sbi" : SBI()
+    }
+    return inference_map[inference_scheme]
 

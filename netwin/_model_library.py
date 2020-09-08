@@ -61,4 +61,13 @@ def exponential_decay(u0, t):
     f1 = a * np.exp(-l * t)
 
     return f1
+
+def set_model(model: str):
+    model_map = {
+        "network_diffusion": network_diffusion, 
+        "network_fkpp": network_fkpp,
+        "exponential_decay" : exponential_decay
+    }
+    return model_map[model]
+    
     

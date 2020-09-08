@@ -28,7 +28,7 @@ class Model(object):
 
         self.f, self.which_model = self._models(model_choice = self.which_model)
 
-        self.infer == None
+        self.infer = None
 
     def _models(self, model_choice: str): 
         """HoF to set model variable based on user choice 
@@ -42,15 +42,9 @@ class Model(object):
         model_choice : str 
                        return string containing the function set to f
         """
-        if model_choice == 'network_diffusion': 
-            f = network_diffusion
-            return f, model_choice
-        elif model_choice == 'fkpp':
-            f = network_fkpp
-            return f, model_choice 
-        elif model_choice == 'exponential_decay':
-            f = exponential_decay
-            return f, model_choice
+        f = set_model(model_choice)
+        return f, model_choice
+
 
     def simulate(self, u0, t, params):
         """Function to use odeint to sovle network models 
@@ -67,7 +61,7 @@ class Model(object):
         """
         return odeint(self.f, u0, t, args=(params,))
 
-    def infer(self,inference_scheme):
+    def set_infer(self,inference_scheme):
         """function to set inference class given by a particular inference scheme
         args : 
             inference scheme : str
@@ -79,10 +73,6 @@ class Model(object):
                    inference : class 
                                returns class object corresponding to infernce scheme chosen
         """
-        if inference_scheme == 'mcmc': 
-            return inference_scheme
-        if inference_scheme == 'vb':
-            self.infer = VB()
-        if inference_scheme == 'sbi':
-            return inference_scheme
+        self.infer = set_inference(inference_scheme)
+        self.which_inference = inference_scheme
     
