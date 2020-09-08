@@ -3,19 +3,21 @@
 from netwin._inference import * 
 import numpy as np
 
-class vb(object): 
+class VB(object): 
     """class to set up inference schemes for vb
     """
     def __init__(self):
-        pass
+        print('vb')
+        self.priors = None
+        self.init_params = None
 
     def __setpriors(self, init_means):
 
         m0 = np.zeros_like(init_means)
         p0 = np.linalg.inv(np.diag(np.ones_like(m0) * 1e5))
 
-        beta_mean0 = 1e-2
-        beta_var0  = 1e-2
+        beta_mean0 = 1
+        beta_var0  = 1000
 
         c0 = beta_var0 / beta_mean0
         s0 = beta_mean0**2 / beta_var0
@@ -30,20 +32,21 @@ class vb(object):
         
         m = init_means
         p = np.linalg.inv(np.diag(np.ones_like(m)))
-        c = priors[2]
-        s = priors[3]
-
+        #c = np.array([priors[2]])
+        #s = np.array([priors[3]])
+        c = np.array([1e-8])
+        s = np.array([50.0])
         params = m, p, c, s
         
         return params, priors
 
-    def fit(self, data, init_means, t, priors = None, n=50):
+    def fit(self, f, data, init_means, t, priors = None, n=50):
         
         self.init_params, self.priors = self.__initialise(init_means, priors)
-        
-        params, theta_n = fit(self.f, data, init_params, priors, t, n)
-         
-        return params, theta_n 
+
+        params, theta_n = fit(f, data, self.init_params, self.priors, t, n)
+
+        return params, theta_n
 
 class mcmc(object):
     pass 

@@ -82,7 +82,7 @@ class Model(object):
         if inference_scheme == 'mcmc': 
             return inference_scheme
         if inference_scheme == 'vb':
-            self.infer = vb
+            self.infer = VB()
         if inference_scheme == 'sbi':
             return inference_scheme
     

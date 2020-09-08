@@ -2,6 +2,8 @@
 multivariate normal distribution and gamma distribution
 """
 
+import numpy as np
+
 def time_step(theta): 
     """Control time stepping interval proportional to the parameter magnitiude. 
 
@@ -95,7 +97,7 @@ def parameter_update(error, params, priors, J):
 
     return params
 
-def noise_update(error, params, priors, J):
+def noise_update(error, data, params, priors, J):
     """ Update forward model function parameters phi in accordance with the update equations above
     
     args: 
@@ -154,7 +156,6 @@ def fit(f, data, params, priors, t, n):
         
         J = Jacobian(f, theta[i,:], t)
         params = parameter_update(error, params, priors, J)
-        params = noise_update(error, params, priors, J)
-        print(params)
-
+        params = noise_update(error, data, params, priors, J)
+        print(theta[i,:])
     return params, theta
