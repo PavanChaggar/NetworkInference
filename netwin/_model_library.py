@@ -48,4 +48,17 @@ def network_fkpp(u0, t, params):
     du = k * np.matmul(-L, p) + (a * p) * (1 - p)
     return du
 
+def exponential_decay(theta, t): 
+    """ Sipmle exponential decay model
+
+    args: 
+    theta : array, float
+            parameters for function
+        t : array, float 
+            timesteps to evaluate at
+    """
+    a, l = theta
+    f1 = a * np.exp(-l * t)
+
+    return f1
     

@@ -145,7 +145,7 @@ def error_update(y, f, theta, t):
     
     return error
 
-def fit(f, data, params, priors, t, n=50): 
+def fit(f, data, params, priors, t, n): 
     
     theta = np.zeros((n, len(params[0])))
     for i in range(n):

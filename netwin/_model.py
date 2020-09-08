@@ -1,8 +1,8 @@
 """ script containing class and functions for modelling, integrating etc
 """ 
 import netwin as nw
-from netwin._inference import * 
 from ._model_library import *
+from ._infer import *
 from scipy.integrate import odeint
 
 class Model(object): 
@@ -48,6 +48,9 @@ class Model(object):
         elif model_choice == 'fkpp':
             f = network_fkpp
             return f, model_choice 
+        elif model_choice == 'exponential_decay':
+            f = exponential_decay
+            return f, model_choice
 
     def simulate(self, u0, t, params):
         """Function to use odeint to sovle network models 
@@ -77,9 +80,9 @@ class Model(object):
                                returns class object corresponding to infernce scheme chosen
         """
         if inference_scheme == 'mcmc': 
-            pass 
+            return inference_scheme
         if inference_scheme == 'vb':
-            pass 
+            self.infer = vb
         if inference_scheme == 'sbi':
-            pass
+            return inference_scheme
     
