@@ -42,7 +42,7 @@ class vb(object):
         self.init_params, self.priors = self.__initialise(init_means, priors)
         
         params, theta_n = fit(self.f, data, init_params, priors, t, n)
-        
+         
         return params, theta_n 
 
 class mcmc(object):

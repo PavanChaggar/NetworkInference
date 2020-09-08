@@ -35,7 +35,7 @@ class Model(object):
            Presently only network diffusion is implemented 
         args: 
         model choice : str 
-                       string containg the moder user wishes to initialise
+                       string containg the model user wishes to initialise
         returns:
                    f : function
                        function imported from model library implementing desired network model
@@ -72,7 +72,7 @@ class Model(object):
         args : 
             inference scheme : str
                                string object with one of the following options: 
-                               'mcmc'
+                               'mcmc' 
                                'vb'
                                'sbi'
         returns : 
