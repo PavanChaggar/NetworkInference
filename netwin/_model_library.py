@@ -1,6 +1,7 @@
 """ Scipt containing different network models 
 """
 import numpy as np
+from netwin import Model
 
 def network_diffusion(u0, t, params):
     """Function to implement the network diffusion model 
@@ -61,6 +62,24 @@ def exponential_decay(u0, t):
     f1 = a * np.exp(-l * t)
 
     return f1
+
+class NetworkDiffusion(Model):
+
+    def f(self, p, t, theta):
+        k = theta
+        du = k * (np.matmul(-self.L, p))
+        return du
+
+    def solve(self, p, t, theta):
+        return odeint(self.f, p, t, args=(theta,))
+
+    def forward(self, u0, t): 
+        p = np.exp(u0[:-1])
+        theta = u0[-1]
+        #
+        # print(u0)
+        u = self.solve(p, t, theta) 
+        return u.T 
 
 def set_model(model: str):
     model_map = {

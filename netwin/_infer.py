@@ -63,3 +63,44 @@ def set_inference(inference_scheme: str):
     }
     return inference_map[inference_scheme]
 
+class InferenceProblem(object):
+    def __init__(self, inference:str, model=None, data=None, time=None, init_means=None, priors=None):
+        if inference == 'VB': 
+            self.which_inference = 'VB'
+            self.model = model
+            self.data = data 
+            self.t = t
+            self.init_means = init_means
+            self.params, self.priors = self.__vbinferenceproblem(self)
+
+    def __vbinferenceproblem(self): 
+        if priors == None:
+        priors = setpriors(init_means)
+    
+        m = init_means
+        p = np.linalg.inv(np.diag(np.ones_like(m)))
+        #c = np.array([priors[2]])
+        #s = np.array([priors[3]])
+        c = np.array([1e-8])
+        s = np.array([50.0])
+        params = m, p, c, s
+        
+        return params, priors
+
+    def __vbsetpriors(init_means):
+
+        m0 = np.zeros_like(init_means)
+        p0 = np.linalg.inv(np.diag(np.ones_like(m0) * 1e5))
+
+        beta_mean0 = 1.0
+        beta_var0  = 1000.0
+
+        c0 = beta_var0 / beta_mean0
+        s0 = beta_mean0**2 / beta_var0
+
+        priors = m0, p0, c0, s0
+
+        return priors
+
+    def infer(self):
+        return fit(problem)

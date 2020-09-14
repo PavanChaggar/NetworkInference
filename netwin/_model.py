@@ -3,12 +3,14 @@
 import netwin as nw
 from ._model_library import *
 from ._infer import *
+
 from scipy.integrate import odeint
+from abc import ABC, abstractmethod
 
 class Model(object): 
     """Model class for the easy implementation of network models
     """
-    def __init__(self, network_path: str, model_name: str):
+    def __init__(self, network_path: str):
         """initialise class with network and model 
         args:
           filename : str
@@ -20,34 +22,36 @@ class Model(object):
                            du = k*(L @ p)
         """
         self.filename = network_path
-        self.which_model = model_name
 
         self.A = nw.adjacency_matrix(self.filename)
         self.D = nw.degree_matrix(self.A)
         self.L = nw.graph_Laplacian(A=self.A, D=self.D)
 
-        self.f, self.which_model = self._models(model_choice = self.which_model)
-
         self.infer = None
 
-    def _models(self, model_choice: str): 
-        """HoF to set model variable based on user choice 
-           Presently only network diffusion is implemented 
+    @abstractmethod
+    def f(self):
+        """Function set to be the model implemented
         args: 
-        model choice : str 
-                       string containg the model user wishes to initialise
-        returns:
-                   f : function
-                       function imported from model library implementing desired network model
-        model_choice : str 
-                       return string containing the function set to f
+            u0 : array  
+                array containing intial conditions 
+            t : array
+                numpy array containing time steps at which to evaluate model
+                e.g. t = np.linespace(0, 1, 100)
+        params : array 
+                array containing parameter values
+                e.g. params = [L, k]
+                    L = Graph Laplacian 
+                    k = diffusion coefficient 
+        returns: 
+            u : array 
+                solution to differential equation at times t 
         """
-        f = set_model(model_choice)
-        return f, model_choice
+        raise NotImplementedError('This should be implemented')
 
-
-    def simulate(self, u0, t, params):
-        """Function to use odeint to sovle network models 
+    @abstractmethod
+    def solve(self):
+        """Function to use odeint to sovle network model in f
         args: 
                u0 : array  
                     array containing intial conditions 
@@ -59,7 +63,23 @@ class Model(object):
                 u : array 
                     solution to differential equation at times t 
         """
-        return odeint(self.f, u0, t, args=(params,))
+        raise NotImplementedError('This should be implemented')
+
+    @abstractmethod
+    def forward(self):
+        """Function to describt ehf forward model
+        args: 
+               u0 : array  
+                    array containing intial conditions 
+                t : arrau 
+                    arrau containing time steps at which to evaluate model   
+           params : array 
+                    array containing parameter values
+        returns: 
+                u : array 
+                    solution to differential equation at times t 
+        """
+        raise NotImplementedError('This should be implemented')
 
     def set_infer(self,inference_scheme):
         """function to set inference class given by a particular inference scheme
