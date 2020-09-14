@@ -75,7 +75,7 @@ class InferenceProblem(object):
 
     def __vbinferenceproblem(self): 
         if priors == None:
-        priors = setpriors(init_means)
+            priors = setpriors(init_means)
     
         m = init_means
         p = np.linalg.inv(np.diag(np.ones_like(m)))

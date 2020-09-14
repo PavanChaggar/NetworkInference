@@ -1,13 +1,13 @@
 """ script containing class and functions for modelling, integrating etc
 """ 
 import netwin as nw
-from ._model_library import *
+#from ._model_library import *
 from ._infer import *
 
 from scipy.integrate import odeint
 from abc import ABC, abstractmethod
 
-class Model(object): 
+class Model(ABC): 
     """Model class for the easy implementation of network models
     """
     def __init__(self, network_path: str):
@@ -94,5 +94,5 @@ class Model(object):
                                returns class object corresponding to infernce scheme chosen
         """
         self.infer = set_inference(inference_scheme)
-        self.which_inference = inference_scheme
+        #self.which_inference = inference_scheme
     
