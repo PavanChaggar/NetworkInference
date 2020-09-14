@@ -2,6 +2,10 @@
 multivariate normal distribution and gamma distribution
 """
 
+""" Scipt containing functions to implement variational inference using 
+multivariate normal distribution and gamma distribution
+"""
+
 import numpy as np
 
 def time_step(theta): 
@@ -12,15 +16,14 @@ def time_step(theta):
     """
 
     delta = theta * 1e-5
-
-    if delta < 0:
+    if delta.any() < 0:
             delta = -delta
-    if delta < 1e-10:
+    if delta.any() < 1e-10:
             delta = 1e-10
     
     return delta
 
-def central_difference(f, i, theta, delta, t):
+def central_difference(m, i, theta, delta, t):
     """ Calculate the derivate using a first order central difference approximation
 
     args:
@@ -39,13 +42,15 @@ def central_difference(f, i, theta, delta, t):
              first order approximation, df, for time steps, t
     """
     dtheta = np.array(theta), np.array(theta)
-
     dtheta[0][i] += delta
     dtheta[1][i] -= delta
-    df = (f(dtheta[0], t) - f(dtheta[1], t)) / (2 * delta)
+    f_1 = m.forward(u0=dtheta[0], t=t)
+    f_2 = m.forward(u0=dtheta[1], t=t)
+    den = (2 * delta)
+    df = (f_1 - f_2) / den
     return df
 
-def Jacobian(f, theta, t):
+def Jacobian(m, theta, t):
     """Compute the Jacobian for globally defined function, f, with parameter set Theta 
 
     args:
@@ -65,8 +70,9 @@ def Jacobian(f, theta, t):
     for i in range(p_n):
         delta = time_step(theta[i])
         if J is None:
-                J = np.zeros([len(t), len(theta)], dtype=np.float32)
-        J[:,i] = central_difference(f, i, theta, delta, t)
+                J = np.zeros([len(theta[:-1]) * len(t), len(theta)], dtype=np.float32)
+        df = central_difference(m, i, theta, delta, t)
+        J[:,i] = df.flatten()
     
     return J
 
@@ -91,7 +97,7 @@ def parameter_update(error, params, priors, J):
 
     p_new = s*c*np.dot(J.transpose(), J) + p0
     c_new = np.linalg.inv(p_new)
-    m_new = np.dot(c_new, (s * c * np.dot(J.transpose(), (error +    np.dot(J, m))) + np.dot(p0, m0)))
+    m_new = np.dot(c_new, (s * c * np.dot(J.transpose(), (error.flatten() +    np.dot(J, m))) + np.dot(p0, m0)))
     
     params[0][:], params[1][:] = m_new, p_new
 
@@ -117,16 +123,15 @@ def noise_update(error, data, params, priors, J):
     _, _, s0, c0 = priors
 
     N = len(data)
-
     c = np.linalg.inv(p)
     c_new = N/2 + c0
-    s_new = 1/(1/s0 + 1/2 * np.dot(error.transpose(), error) + 1/2 * np.trace(np.dot(c, np.dot(J.transpose(), J))))
+    s_new = 1/(1/s0 + 1/2 * np.dot(error.flatten().transpose(), error.flatten()) + 1/2 * np.trace(np.dot(c, np.dot(J.transpose(), J))))
     
     params[2][:], params[3][:] = c_new, s_new
 
     return params
 
-def error_update(y, f, theta, t):
+def error_update(y, m, theta, t):
     """Calculate difference between data and model with updated parameters
 
     args:
@@ -141,21 +146,18 @@ def error_update(y, f, theta, t):
     error : array, float 
             vector of difference between noisy data and updated model
     """
-
-
-    error = y - f(theta[:2], t)
+    error = y - m.forward(u0=theta[0], t=t)
     
     return error
 
-def fit(f, data, params, priors, t, n): 
-    
-    theta = np.zeros((n, len(params[0])))
+def fit(problem, n=50): 
+    m, data, t, params, priors = problem
+
     for i in range(n):
-        theta[i,:] = params[0]
-        error = error_update(data, f, theta[i,:], t)
-        
-        J = Jacobian(f, theta[i,:], t)
+
+        error = error_update(data, m, params, t)
+
+        J = Jacobian(m, params[0], t)
         params = parameter_update(error, params, priors, J)
         params = noise_update(error, data, params, priors, J)
-        print(theta[i,:])
-    return params, theta
+    return params

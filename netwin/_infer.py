@@ -16,8 +16,8 @@ class VB(object):
         m0 = np.zeros_like(init_means)
         p0 = np.linalg.inv(np.diag(np.ones_like(m0) * 1e5))
 
-        beta_mean0 = 1
-        beta_var0  = 1000
+        beta_mean0 = 1.0
+        beta_var0  = 1000.0
 
         c0 = beta_var0 / beta_mean0
         s0 = beta_mean0**2 / beta_var0
