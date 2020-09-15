@@ -1,11 +1,8 @@
 """ script containing class and functions for modelling, integrating etc
 """ 
-import netwin as nw
-#from ._model_library import *
-from ._infer import *
-
-from scipy.integrate import odeint
 from abc import ABC, abstractmethod
+
+from ._networks import *
 
 class Model(ABC): 
     """Model class for the easy implementation of network models
@@ -23,9 +20,9 @@ class Model(ABC):
         """
         self.filename = network_path
 
-        self.A = nw.adjacency_matrix(self.filename)
-        self.D = nw.degree_matrix(self.A)
-        self.L = nw.graph_Laplacian(A=self.A, D=self.D)
+        self.A = adjacency_matrix(self.filename)
+        self.D = degree_matrix(self.A)
+        self.L = graph_Laplacian(A=self.A, D=self.D)
 
         self.infer = None
 
@@ -80,19 +77,3 @@ class Model(ABC):
                     solution to differential equation at times t 
         """
         raise NotImplementedError('This should be implemented')
-
-    def set_infer(self,inference_scheme):
-        """function to set inference class given by a particular inference scheme
-        args : 
-            inference scheme : str
-                               string object with one of the following options: 
-                               'mcmc' 
-                               'vb'
-                               'sbi'
-        returns : 
-                   inference : class 
-                               returns class object corresponding to infernce scheme chosen
-        """
-        self.infer = set_inference(inference_scheme)
-        #self.which_inference = inference_scheme
-    
