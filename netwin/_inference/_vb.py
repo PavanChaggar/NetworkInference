@@ -151,9 +151,15 @@ def error_update(y, m, theta, t):
     return error
 
 def fit(problem, n=50): 
-    m, data, t, params, priors = problem
+    m = problem.model
+    data = problem.data 
+    t = problem.t
+    params = problem.params
+    priors = problem.priors
+    #theta = np.zeros((n, len(params[0])))
 
     for i in range(n):
+        #theta[i,:] = params[0]
 
         error = error_update(data, m, params, t)
 
