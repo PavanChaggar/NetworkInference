@@ -50,7 +50,7 @@ def central_difference(m, i, theta, delta, t):
     df = (f_1 - f_2) / den
     return df
 
-def Jacobian(m, theta, t):
+def Jacobian(m, theta, t, n_params):
     """Compute the Jacobian for globally defined function, f, with parameter set Theta 
 
     args:
@@ -70,7 +70,7 @@ def Jacobian(m, theta, t):
     for i in range(p_n):
         delta = time_step(theta[i])
         if J is None:
-                J = np.zeros([len(theta[:-1]) * len(t), len(theta)], dtype=np.float32)
+                J = np.zeros([len(theta[:-n_params]) * len(t), len(theta)], dtype=np.float32)
         df = central_difference(m, i, theta, delta, t)
         J[:,i] = df.flatten()
     
@@ -150,20 +150,23 @@ def error_update(y, m, theta, t):
     
     return error
 
-def fit(problem, n=50): 
+def vb(problem, n=20): 
     m = problem.model
     data = problem.data 
     t = problem.t
     params = problem.params
     priors = problem.priors
+    n_params = problem.n_params
     #theta = np.zeros((n, len(params[0])))
 
     for i in range(n):
         #theta[i,:] = params[0]
-
+        print('Iteration %d' %i)
         error = error_update(data, m, params, t)
 
-        J = Jacobian(m, params[0], t)
+        J = Jacobian(m, params[0], t, n_params)
         params = parameter_update(error, params, priors, J)
         params = noise_update(error, data, params, priors, J)
+        
+    print('Finished!')
     return params

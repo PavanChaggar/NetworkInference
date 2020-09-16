@@ -9,3 +9,5 @@ from ._model import Model
 from ._infer import *
 
 from .utils import plot_nodes
+
+from ._model_library import *

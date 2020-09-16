@@ -24,8 +24,6 @@ class Model(ABC):
         self.D = degree_matrix(self.A)
         self.L = graph_Laplacian(A=self.A, D=self.D)
 
-        self.infer = None
-
     @abstractmethod
     def f(self):
         """Function set to be the model implemented

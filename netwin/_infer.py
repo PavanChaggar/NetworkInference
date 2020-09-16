@@ -2,6 +2,7 @@
 """
 from netwin._inference import * 
 import numpy as np
+from ._model import Model
 
 class InferenceProblem(object):
     """Class for setting Inference Problems 
@@ -19,11 +20,16 @@ class InferenceProblem(object):
     def __init__(self, inference:str, model=None, data=None, t=None, init_means=None, priors=None):
         if inference == 'VB': 
             self.which_inference = 'VB'
-            self.model = model
+
+            if not isinstsance(model, Model):
+                raise TypeError('Change this Model class, motherfucker.')
+
+            self.model = model #check model is instance of model class
             self.data = data 
             self.t = t
             self.init_means = init_means
             self.params, self.priors = self.__vbinferenceproblem(init_means)
+            self.n_params = len(init_means) - len(model.L)
 
     def __vbinferenceproblem(self, init_means, priors=None): 
         if priors == None:
