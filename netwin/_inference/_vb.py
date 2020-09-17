@@ -150,14 +150,7 @@ def error_update(y, m, theta, t):
     
     return error
 
-def vb(problem, n=20): 
-    m = problem.model
-    data = problem.data 
-    t = problem.t
-    params = problem.params
-    priors = problem.priors
-    n_params = problem.n_params
-    #theta = np.zeros((n, len(params[0])))
+def vb(m, data, t, params, priors, n_params, n): 
 
     for i in range(n):
         #theta[i,:] = params[0]

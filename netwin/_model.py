@@ -20,9 +20,9 @@ class Model(ABC):
         """
         self.filename = network_path
 
-        self.A = adjacency_matrix(self.filename)
-        self.D = degree_matrix(self.A)
-        self.L = graph_Laplacian(A=self.A, D=self.D)
+        self.__A = adjacency_matrix(self.filename)
+        self.__D = degree_matrix(self.__A)
+        self.__L = graph_Laplacian(A=self.__A, D=self.__D)
 
     @abstractmethod
     def f(self):
@@ -75,3 +75,13 @@ class Model(ABC):
                     solution to differential equation at times t 
         """
         raise NotImplementedError('This should be implemented')
+    
+    def L(self):
+        return self.__L
+
+    def A(self):
+        return self.__A 
+    
+    def D(self):
+        return self.__D 
+

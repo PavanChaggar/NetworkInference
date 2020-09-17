@@ -9,7 +9,7 @@ class NetworkDiffusion(Model):
 
     def f(self, p, t, theta):
         k = theta
-        du = k * (-self.L @ p)
+        du = k * (-self.L() @ p)
         return du
 
     def solve(self, p, t, theta):
@@ -26,7 +26,7 @@ class NetworkDiffusion(Model):
 class NetworkFKPP(Model):
     def f(self, p, t, theta):
         k, a = theta
-        du = k * (-self.L @ p) + (a * p) * (1 - p)
+        du = k * (-self.L() @ p) + (a * p) * (1 - p)
         return du
 
     def solve(self, p, t, theta):

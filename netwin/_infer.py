@@ -19,17 +19,17 @@ class InferenceProblem(object):
     """
     def __init__(self, inference:str, model=None, data=None, t=None, init_means=None, priors=None):
         if inference == 'VB': 
-            self.which_inference = 'VB'
+            self.__which_inference = 'VB'
 
             if not isinstance(model, Model):
                 raise TypeError('Change this Model class, motherfucker.')
 
-            self.model = model #check model is instance of model class
-            self.data = data 
-            self.t = t
-            self.init_means = init_means
-            self.params, self.priors = self.__vbinferenceproblem(init_means)
-            self.n_params = len(init_means) - len(model.L)
+            self.__model = model #check model is instance of model class
+            self.__data = data 
+            self.__t = t
+            self.__init_means = init_means
+            self.__params, self.__priors = self.__vbinferenceproblem(init_means)
+            self.__n_params = len(init_means) - len(model.L())
 
     def __vbinferenceproblem(self, init_means, priors=None): 
         if priors == None:
@@ -59,3 +59,20 @@ class InferenceProblem(object):
         priors = m0, p0, c0, s0
 
         return priors
+        
+    def infer(self, n = 10):
+        if self.__which_inference == 'VB': 
+            return vb(m=self.__model, data=self.__data, t=self.__t, params=self.__params, priors=self.__priors, n_params=self.__n_params, n=n)
+
+    def get(self,attribute:str):
+        attributes = {
+             'model': self.__model,
+              'data': self.__data,
+              'time': self.__t,
+        'init_means': self.__init_means,
+            'params': self.__params,
+            'priors': self.__priors,
+          'n_params': self.__n_params,
+             'which': self.__which_inference
+        }
+        return attributes[attribute]
