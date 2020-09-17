@@ -13,6 +13,8 @@ setup(
         'numpy',
         'matplotlib',
         'scipy',
-        'networkx'
+        'networkx',
+        'pandas',
+        'plotly'
     ],
 )

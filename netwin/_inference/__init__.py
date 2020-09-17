@@ -1,1 +1,1 @@
-from ._vb import fit
+from ._vb import vb
