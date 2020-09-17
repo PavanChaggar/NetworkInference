@@ -21,7 +21,7 @@ class InferenceProblem(object):
         if inference == 'VB': 
             self.which_inference = 'VB'
 
-            if not isinstsance(model, Model):
+            if not isinstance(model, Model):
                 raise TypeError('Change this Model class, motherfucker.')
 
             self.model = model #check model is instance of model class
