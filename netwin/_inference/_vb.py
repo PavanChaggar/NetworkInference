@@ -44,8 +44,8 @@ def central_difference(m, i, theta, delta, t):
     dtheta = np.array(theta), np.array(theta)
     dtheta[0][i] += delta
     dtheta[1][i] -= delta
-    f_1 = m.forward(u0=dtheta[0], t=t)
-    f_2 = m.forward(u0=dtheta[1], t=t)
+    f_1 = m.forward(u0=dtheta[0])
+    f_2 = m.forward(u0=dtheta[1])
     den = (2 * delta)
     df = (f_1 - f_2) / den
     return df
@@ -146,7 +146,7 @@ def error_update(y, m, theta, t):
     error : array, float 
             vector of difference between noisy data and updated model
     """
-    error = y - m.forward(u0=theta[0], t=t)
+    error = y - m.forward(u0=theta[0])
     
     return error
 

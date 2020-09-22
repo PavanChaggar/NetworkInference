@@ -17,7 +17,7 @@ class InferenceProblem(object):
     In addition to the input variables, the __init__ will return initial distribution
     parameter values and prior distribution parameter values
     """
-    def __init__(self, inference:str, model=None, data=None, t=None, init_means=None, priors=None):
+    def __init__(self, inference:str, model=None, data=None, init_means=None, priors=None):
         if inference == 'VB': 
             self.__which_inference = 'VB'
 
@@ -26,7 +26,7 @@ class InferenceProblem(object):
 
             self.__model = model #check model is instance of model class
             self.__data = data 
-            self.__t = t
+            self.__t = model.t
             self.__init_means = init_means
             self.__params, self.__priors = self.__vbinferenceproblem(init_means)
             self.__n_params = len(init_means) - len(model.L())
