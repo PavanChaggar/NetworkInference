@@ -17,6 +17,7 @@ setup(
         'pandas',
         'plotly',
         'torch',
-        'sbi'
+        'nilearn',
+        'sbi',
     ],
 )

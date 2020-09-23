@@ -16,7 +16,7 @@ def max_norm(in_vector):
 def sum_mean(in_vector):
    return in_vector / np.sum(in_vector)
 
-def plot_nodes(in_vector, colour='Reds'):
+def plot_nodes(in_vector, opacity, colour='Reds'):
 
    nodes = pd.read_csv(get_nodes(len(in_vector)))
 
@@ -31,8 +31,14 @@ def plot_nodes(in_vector, colour='Reds'):
                               size=20,
                               color=max_norm(in_vector),
                               colorscale=colour,
-                              line=dict(color='rgb(50,50,50)', width=0.5)
-                              ),
+                              line=dict(color='rgba(50,50,50,0.3)', width=0.5),
+                              opacity=opacity,
+                              colorbar=dict(
+                                    thickness=15,
+                                    title='Node Connections',
+                                    xanchor='left',
+                                    titleside='right'),
+                              ),                              
                   text=nodes.Label,
                   hoverinfo='text'
                   )

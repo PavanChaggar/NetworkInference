@@ -20,7 +20,7 @@ class NetworkDiffusion(Model):
         theta = u0[-1]
 
         u = self.solve(p,theta) 
-        return u.T  
+        return u
 
 class NetworkFKPP(Model):
     def f(self, p, t, theta):
@@ -36,6 +36,6 @@ class NetworkFKPP(Model):
         theta = u0[-2:]
         
         u = self.solve(p, theta) 
-        return u.T 
+        return u
     
     
