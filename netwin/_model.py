@@ -18,9 +18,10 @@ class Model(ABC):
                         - 'network_diffusion' 
                            du = k*(L @ p)
         """
-        self.filename = network_path
+        if type(network_path) == str:
+            self.filename = network_path
 
-        self.__A = adjacency_matrix(self.filename)
+        self.__A = adjacency_matrix(network_path)
         self.__D = degree_matrix(self.__A)
         self.__L = graph_Laplacian(A=self.__A, D=self.__D)
 

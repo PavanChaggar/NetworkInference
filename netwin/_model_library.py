@@ -33,7 +33,7 @@ class NetworkFKPP(Model):
 
     def forward(self, u0): 
         p = np.exp(u0[:-2])
-        theta = u0[-2:]
+        theta = np.exp(u0[-2:])
         
         u = self.solve(p, theta) 
         return u

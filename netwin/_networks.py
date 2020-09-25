@@ -11,11 +11,13 @@ def adjacency_matrix(graph_path: str):
            A : array/matrix
                square array containing the adjacency matrix 
     """
-
-    if graph_path.endswith('.csv'):
-        A = np.genfromtxt(graph_path, delimiter=',') 
-    elif graph_path.endswith('.graphml'):
-        pass
+    if type(graph_path) == str:
+        if graph_path.endswith('.csv'):
+            A = np.genfromtxt(graph_path, delimiter=',') 
+        elif graph_path.endswith('.graphml'):
+            pass
+    elif type(graph_path) == np.ndarray:
+        A = graph_path
 
     return A
 

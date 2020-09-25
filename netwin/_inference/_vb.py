@@ -8,6 +8,12 @@ multivariate normal distribution and gamma distribution
 
 import numpy as np
 
+from scipy.special import digamma 
+from scipy.special import loggamma 
+
+from scipy.stats import norm, gamma
+
+
 def time_step(theta): 
     """Control time stepping interval proportional to the parameter magnitiude. 
 
@@ -23,7 +29,7 @@ def time_step(theta):
     
     return delta
 
-def central_difference(m, i, theta, delta, t):
+def central_difference(M, i, theta, delta, t):
     """ Calculate the derivate using a first order central difference approximation
 
     args:
@@ -44,13 +50,13 @@ def central_difference(m, i, theta, delta, t):
     dtheta = np.array(theta), np.array(theta)
     dtheta[0][i] += delta
     dtheta[1][i] -= delta
-    f_1 = m.forward(u0=dtheta[0])
-    f_2 = m.forward(u0=dtheta[1])
+    f_1 = M.forward(u0=dtheta[0])
+    f_2 = M.forward(u0=dtheta[1])
     den = (2 * delta)
     df = (f_1 - f_2) / den
     return df
 
-def Jacobian(m, theta, t, n_params):
+def Jacobian(M, theta, t, n_params):
     """Compute the Jacobian for globally defined function, f, with parameter set Theta 
 
     args:
@@ -71,10 +77,27 @@ def Jacobian(m, theta, t, n_params):
         delta = time_step(theta[i])
         if J is None:
                 J = np.zeros([len(theta[:-n_params]) * len(t), len(theta)], dtype=np.float32)
-        df = central_difference(m, i, theta, delta, t)
+        df = central_difference(M, i, theta, delta, t)
         J[:,i] = df.flatten()
     
     return J
+
+def free_energy(data, params, priors):
+
+    N = len(data)
+
+    m, p, c, s = params
+    C = np.linalg.inv(p)
+
+    m0,p0,c0,s0 = priors
+
+    F = (N/2+c0-c)*(np.log(s)+digamma(c)) + s*c/2*(1/s-1/s0)
+    F += c*np.log(s)+loggamma(c)
+    _,logdetP = np.linalg.slogdet(p)
+    F += logdetP/2
+    F -= 1/2*(np.dot(np.dot((m-m0).transpose(),p0),m-m0)+np.trace(np.dot(C,p0)))
+   
+    return F
 
 def parameter_update(error, params, priors, J):
     """ Update forward model function parameters theta in accordance with the update equations above
@@ -92,7 +115,7 @@ def parameter_update(error, params, priors, J):
        params : tuple
                 updated parameters values
     """
-    m, p, s, c = params
+    m, p, c, s = params
     m0, p0, _, _ = priors
 
     p_new = s*c*np.dot(J.transpose(), J) + p0
@@ -120,7 +143,7 @@ def noise_update(error, data, params, priors, J):
                 updated parameters values
     """
     _, p, _, _ = params 
-    _, _, s0, c0 = priors
+    _, _, c0, s0 = priors
 
     N = len(data)
     c = np.linalg.inv(p)
@@ -131,7 +154,7 @@ def noise_update(error, data, params, priors, J):
 
     return params
 
-def error_update(y, m, theta, t):
+def error_update(y, M, theta, t):
     """Calculate difference between data and model with updated parameters
 
     args:
@@ -146,20 +169,32 @@ def error_update(y, m, theta, t):
     error : array, float 
             vector of difference between noisy data and updated model
     """
-    error = y - m.forward(u0=theta[0])
+    error = y - M.forward(u0=theta[0])
     
     return error
 
-def vb(m, data, t, params, priors, n_params, n): 
-
+def vb(M, data, t, params, priors, n_params, n): 
+    m = np.zeros((n,len(params[0])))
+    p = np.zeros((n, len(params[0]), len(params[0])))
+    c = np.zeros((n))
+    s = np.zeros((n))
+    F = np.zeros((n))
     for i in range(n):
         #theta[i,:] = params[0]
         print('Iteration %d' %i)
-        error = error_update(data, m, params, t)
+        error = error_update(data, M, params, t)
 
-        J = Jacobian(m, params[0], t, n_params)
+        J = Jacobian(M, params[0], t, n_params)
         params = parameter_update(error, params, priors, J)
+        m[i] = params[0]
+        p[i] = params[1]
         params = noise_update(error, data, params, priors, J)
-        
+        c[i] = params[2]
+        s[i] = params[3]
+        F[i] = free_energy(data, params, priors)
+        print(F[i])
+    max_F = np.argmax(F)
+    print(max_F)
+    params = m[max_F], p[max_F], c[max_F], s[max_F]
     print('Finished!')
-    return params
+    return params, F

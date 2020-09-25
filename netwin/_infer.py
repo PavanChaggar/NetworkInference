@@ -53,16 +53,20 @@ class InferenceProblem(object):
         beta_mean0 = 1.0
         beta_var0  = 1000.0
 
-        c0 = beta_var0 / beta_mean0
-        s0 = beta_mean0**2 / beta_var0
+        s0 = beta_var0 / beta_mean0
+        c0 = beta_mean0**2 / beta_var0
 
         priors = m0, p0, c0, s0
 
         return priors
         
-    def infer(self, n = 10):
+    def infer(self, n = 10, priors=None):
+        if priors != None:
+            priors = priors
+        else:
+            priors = self.__priors
         if self.__which_inference == 'VB': 
-            return vb(m=self.__model, data=self.__data, t=self.__t, params=self.__params, priors=self.__priors, n_params=self.__n_params, n=n)
+            return vb(M=self.__model, data=self.__data, t=self.__t, params=self.__params, priors=priors, n_params=self.__n_params, n=n)
 
     def get(self,attribute:str):
         attributes = {
