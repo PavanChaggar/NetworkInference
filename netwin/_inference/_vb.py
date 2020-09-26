@@ -192,9 +192,7 @@ def vb(M, data, t, params, priors, n_params, n):
         c[i] = params[2]
         s[i] = params[3]
         F[i] = free_energy(data, params, priors)
-        print(F[i])
     max_F = np.argmax(F)
-    print(max_F)
     params = m[max_F], p[max_F], c[max_F], s[max_F]
     print('Finished!')
     return params, F

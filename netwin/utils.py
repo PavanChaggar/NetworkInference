@@ -3,6 +3,7 @@
 import pandas as pd 
 import numpy as np 
 import plotly.graph_objs as go
+import matplotlib.pyplot as plt
 
 def get_nodes(scale):
    network_map = {
@@ -71,3 +72,13 @@ def plot_nodes(in_vector, opacity, colour='Reds'):
    data=[trace1]
    fig=go.Figure(data=data, layout=layout)
    return fig.show()
+
+def plot_timeseries(data, time_interval, colours=['g'], alpha=[0.5]):
+
+    ax = plt.figure()
+
+    for i, x in enumerate(data):
+        for j in range(len(x[0])):
+            plt.plot(time_interval, x[:,j], c=colours[i], alpha=alpha[i])
+
+    return ax.show()
