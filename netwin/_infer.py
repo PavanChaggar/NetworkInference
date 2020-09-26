@@ -4,7 +4,7 @@ from netwin._inference import *
 import numpy as np
 from ._model import Model
 
-class InferenceProblem(object):
+class VBProblem(object):
     """Class for setting Inference Problems 
     Presently implemented for VB only. 
     Will return a structured object that can be passed into 'fit' to perform variational inference
