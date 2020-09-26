@@ -17,19 +17,18 @@ class VBProblem(object):
     In addition to the input variables, the __init__ will return initial distribution
     parameter values and prior distribution parameter values
     """
-    def __init__(self, inference:str, model=None, data=None, init_means=None, priors=None):
-        if inference == 'VB': 
-            self.__which_inference = 'VB'
+    def __init__(self, model=None, data=None, init_means=None, priors=None):
+        self.__which_inference = 'VB'
 
-            if not isinstance(model, Model):
-                raise TypeError('Change this Model class, motherfucker.')
+        if not isinstance(model, Model):
+            raise TypeError('Change this Model class, motherfucker.')
 
-            self.__model = model #check model is instance of model class
-            self.__data = data 
-            self.__t = model.t
-            self.__init_means = init_means
-            self.__params, self.__priors = self.__vbinferenceproblem(init_means)
-            self.__n_params = len(init_means) - len(model.L())
+        self.__model = model #check model is instance of model class
+        self.__data = data 
+        self.__t = model.t
+        self.__init_means = init_means
+        self.__params, self.__priors = self.__vbinferenceproblem(init_means)
+        self.__n_params = len(init_means) - len(model.L())
 
     def __vbinferenceproblem(self, init_means, priors=None): 
         if priors == None:
