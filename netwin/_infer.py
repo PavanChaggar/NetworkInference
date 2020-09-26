@@ -4,7 +4,7 @@ from netwin._inference import *
 import numpy as np
 from ._model import Model
 
-class InferenceProblem(object):
+class VBProblem(object):
     """Class for setting Inference Problems 
     Presently implemented for VB only. 
     Will return a structured object that can be passed into 'fit' to perform variational inference
@@ -17,19 +17,18 @@ class InferenceProblem(object):
     In addition to the input variables, the __init__ will return initial distribution
     parameter values and prior distribution parameter values
     """
-    def __init__(self, inference:str, model=None, data=None, t=None, init_means=None, priors=None):
-        if inference == 'VB': 
-            self.__which_inference = 'VB'
+    def __init__(self, model=None, data=None, init_means=None, priors=None):
+        self.__which_inference = 'VB'
 
-            if not isinstance(model, Model):
-                raise TypeError('Change this Model class, motherfucker.')
+        if not isinstance(model, Model):
+            raise TypeError('Change this Model class, motherfucker.')
 
-            self.__model = model #check model is instance of model class
-            self.__data = data 
-            self.__t = t
-            self.__init_means = init_means
-            self.__params, self.__priors = self.__vbinferenceproblem(init_means)
-            self.__n_params = len(init_means) - len(model.L())
+        self.__model = model #check model is instance of model class
+        self.__data = data 
+        self.__t = model.t
+        self.__init_means = init_means
+        self.__params, self.__priors = self.__vbinferenceproblem(init_means)
+        self.__n_params = len(init_means) - len(model.L())
 
     def __vbinferenceproblem(self, init_means, priors=None): 
         if priors == None:
@@ -53,16 +52,20 @@ class InferenceProblem(object):
         beta_mean0 = 1.0
         beta_var0  = 1000.0
 
-        c0 = beta_var0 / beta_mean0
-        s0 = beta_mean0**2 / beta_var0
+        s0 = beta_var0 / beta_mean0
+        c0 = beta_mean0**2 / beta_var0
 
         priors = m0, p0, c0, s0
 
         return priors
         
-    def infer(self, n = 10):
+    def infer(self, n = 10, priors=None):
+        if priors != None:
+            priors = priors
+        else:
+            priors = self.__priors
         if self.__which_inference == 'VB': 
-            return vb(m=self.__model, data=self.__data, t=self.__t, params=self.__params, priors=self.__priors, n_params=self.__n_params, n=n)
+            return vb(M=self.__model, data=self.__data, t=self.__t, params=self.__params, priors=priors, n_params=self.__n_params, n=n)
 
     def get(self,attribute:str):
         attributes = {

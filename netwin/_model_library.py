@@ -12,16 +12,15 @@ class NetworkDiffusion(Model):
         du = k * (-self.L() @ p)
         return du
 
-    def solve(self, p, t, theta):
-        return odeint(self.f, p, t, args=(theta,))
+    def solve(self, p, theta):
+        return odeint(self.f, p, self.t, args=(theta,))
 
-    def forward(self, u0, t): 
+    def forward(self, u0): 
         p = np.exp(u0[:-1])
         theta = u0[-1]
-        #
-        # print(u0)
-        u = self.solve(p, t, theta) 
-        return u.T 
+
+        u = self.solve(p,theta) 
+        return u
 
 class NetworkFKPP(Model):
     def f(self, p, t, theta):
@@ -29,14 +28,14 @@ class NetworkFKPP(Model):
         du = k * (-self.L() @ p) + (a * p) * (1 - p)
         return du
 
-    def solve(self, p, t, theta):
-        return odeint(self.f, p, t, args=(theta,))
+    def solve(self, p, theta):
+        return odeint(self.f, p, self.t, args=(theta,))
 
-    def forward(self, u0, t): 
+    def forward(self, u0): 
         p = np.exp(u0[:-2])
-        theta = u0[-2:]
+        theta = np.exp(u0[-2:])
         
-        u = self.solve(p, t, theta) 
-        return u.T 
+        u = self.solve(p, theta) 
+        return u
     
     

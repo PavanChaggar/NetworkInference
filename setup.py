@@ -15,6 +15,9 @@ setup(
         'scipy',
         'networkx',
         'pandas',
-        'plotly'
+        'plotly',
+        'torch',
+        'nilearn',
+        'sbi',
     ],
 )
