@@ -21,7 +21,7 @@ class VBProblem(object):
         self.__which_inference = 'VB'
 
         if not isinstance(model, Model):
-            raise TypeError('Change this Model class, motherfucker.')
+            raise TypeError('Please change this class to inherit from nw.Model.')
 
         self.__model = model #check model is instance of model class
         self.__data = data 
