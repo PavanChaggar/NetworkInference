@@ -34,7 +34,9 @@ class VBProblem(object):
 
         if priors == None:
             priors = self.__vbsetpriors(init_means)
-
+        else:
+            priors = priors
+        
         m = init_means
         p = np.linalg.inv(np.eye(len(m)) * 1e5)
         #c = np.array([priors[2]])
@@ -63,13 +65,9 @@ class VBProblem(object):
 
         return priors
         
-    def infer(self, n = 10, priors=None):
-        if priors != None:
-            priors = priors
-        else:
-            priors = self.__priors
+    def infer(self, n = 10):
         if self.__which_inference == 'VB': 
-            return vb(M=self.__model, data=self.__data, t=self.__t, params=self.__params, priors=priors, n_params=self.__n_params, n=n)
+            return vb(M=self.__model, data=self.__data, t=self.__t, params=self.__params, priors=self.__priors, n_params=self.__n_params, n=n)
 
     def get(self,attribute:str):
         attributes = {
