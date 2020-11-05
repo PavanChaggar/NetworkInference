@@ -31,15 +31,16 @@ class VBProblem(object):
         self.__n_params = len(init_means) - len(model.L())
 
     def __vbinferenceproblem(self, init_means, priors=None): 
+
         if priors == None:
             priors = self.__vbsetpriors(init_means)
-    
+
         m = init_means
-        p = np.linalg.inv(np.diag(np.ones_like(m) * 1e5))
+        p = np.linalg.inv(np.eye(len(m)) * 1e5)
         #c = np.array([priors[2]])
         #s = np.array([priors[3]])
-        c = np.array([1e-8])
-        s = np.array([50.0])
+        c = np.array([priors[2]])
+        s = np.array([priors[3]])
         params = m, p, c, s
         
         return params, priors
@@ -47,13 +48,16 @@ class VBProblem(object):
     def __vbsetpriors(self, init_means):
 
         m0 = np.zeros_like(init_means)
-        p0 = np.linalg.inv(np.diag(np.ones_like(m0) * 1e5))
+        p0 = np.linalg.inv(np.eye(len(m0)) * 1e5)
 
-        beta_mean0 = 1.0
-        beta_var0  = 1000.0
+        #beta_mean0 = 1.0
+        #beta_var0  = 1000.0
 
-        s0 = beta_var0 / beta_mean0
-        c0 = beta_mean0**2 / beta_var0
+        #s0 = beta_var0 / beta_mean0
+        #c0 = beta_mean0**2 / beta_var0
+
+        c0 = 1e-8
+        s0 = 50.0
 
         priors = m0, p0, c0, s0
 
