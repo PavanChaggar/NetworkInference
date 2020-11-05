@@ -13,3 +13,5 @@ netwin.egg-info/
 #vscode 
 .vscode/
 
+#data 
+subjects/

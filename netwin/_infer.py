@@ -35,7 +35,7 @@ class VBProblem(object):
             priors = self.__vbsetpriors(init_means)
     
         m = init_means
-        p = np.linalg.inv(np.diag(np.ones_like(m)))
+        p = np.linalg.inv(np.diag(np.ones_like(m) * 1e5))
         #c = np.array([priors[2]])
         #s = np.array([priors[3]])
         c = np.array([1e-8])
