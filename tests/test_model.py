@@ -54,7 +54,7 @@ class TestModel(unittest.TestCase):
 
         m.t = np.linspace(0, 1, 100)
         u0 = np.ones((n))
-        k = 1.0
+        k = 10.0
         
         # run simulation using f
         u = m.f(u0, m.t, k)
@@ -75,7 +75,7 @@ class TestModel(unittest.TestCase):
         # set up a different problem with non-uniform initial conditions
         u0_2 = np.ones((len(m.A())))
         u0_2[30] = 10.0 
-        
+
         u0_2 = np.append(u0_2, k)
 
         sol_2 = m.forward(u0_2)
@@ -83,41 +83,38 @@ class TestModel(unittest.TestCase):
         # test the solution for the two solutions are different as expected
         assert np.all(sol[0,:]==sol_2[0,:]) == False
         assert np.all(sol_2[0,:]!=sol_2[-1,:])
-'''
-    def test_solve_fkpp(self): 
 
-        m = nw.Model(network_path = self.network_path, model_name='fkpp')
-        assert m.which_model == 'fkpp' 
+    def test_network_fkpp(self): 
+
+        m = nw.NetworkFKPP(self.network_path)
         
-        params = m.L, self.k, self.a
-        
-        u2 = m.f(self.u0, self.t, params)
+        n = len(m.A())
+
+        m.t = np.linspace(0, 1, 100)
+        u0 = np.ones((n))
+        params = 10.0, 5.0
+
+        u = m.f(u0, m.t, params)
 
         # check that f returns an array as expected
-        assert u2.shape == (n,)
-        assert np.all(u2!=self.u0)
+        assert u.shape == (n,)
+        assert np.all(u!=u0)
 
-
-        """Test solver for network fkpp model
-        """
-        #Instantiate class
-        m = nw.Model(network_path = self.network_path, model_name='fkpp')
-        # pack parameters and solve for initial values
-        params = m.L, self.k, self.a
-        sol = m.simulate(self.u0, self.t, params)
+        u0 = np.append(u0, params)
+        sol = m.forward(u0)
         
         # test the shape of the solution and solution is as expected
-        assert sol.shape == (len(self.t),len(m.A))
+        assert sol.shape == (len(m.t),len(m.A()))
         assert sol[0,:].all() == sol[-1,:].all()
 
         # set up a different problem with non-uniform initial conditions
-        u0_2 = np.ones((len(m.A)))
+        u0_2 = np.zeros((n))
         u0_2[30] = 10.0 
-        sol_2 = m.simulate(u0_2, self.t, params)
+        u0_2 = np.append(u0_2, params)
+        sol_2 = m.forward(u0_2)
         
         # test the solution for the two solutions are different as expected
         assert np.all(sol[0,:]==sol_2[0,:]) == False
-        assert np.all(sol_2[0,:]!=sol_2[-1,:])
-    '''
+
 if __name__ == '__main__':
     unittest.main()
