@@ -92,7 +92,7 @@ plt.show()
 
 # %%
 # set priors 
-data = np.empty_like(sim)
+data = np.empty_like(sim) 
 for i in range(len(sim[0])):
     data[:,i] = sim[:,i] + (np.random.rand(len(sim[:,i]))/10)
 
@@ -100,7 +100,7 @@ p0 = np.zeros([83])
 k0 = 0
 a0 = 0
 u_0 = np.append(p0, [k0, a0])
-n=100
+n=80
 
 problem = VBProblem(model=m, data=data, init_means=u_0)
 
@@ -116,7 +116,7 @@ plt.bar(range(83), np.exp(sol[0][:-2]), alpha=0.5, color='r', label='inferred')
 plt.xlabel("Node ID")
 plt.ylabel("Initial Protein Concentration")
 plt.legend()
-plt.savefig('/home/chaggar/Documents/PLOTS/initial_conc.png', dpi=1000)
+#plt.savefig('/home/chaggar/Documents/PLOTS/initial_conc.png', dpi=1000)
 plt.show()
 
 # %%
@@ -128,14 +128,14 @@ plt.xlabel("Time")
 plt.legend((inf[0], si[0]), ('inferred', 'simulated'))
 #l2 = plt.legend(si, ['simulated'])
 #plt.gca().add_artist(l1)
-plt.savefig('/home/chaggar/Documents/PLOTS/inferred_time.png', dpi=1000)
-plt.show()
+#plt.savefig('/home/chaggar/Documents/PLOTS/inferred_time.png', dpi=1000)
+#plt.show()
 # %%
 plt.plot(range(n), F, alpha=0.8, label='Free Energy')
 plt.ylabel("Free Energy")
 plt.xlabel("Iteration #")
 plt.legend()
-plt.savefig('/home/chaggar/Documents/PLOTS/free_energy.png', dpi=1000)
+#plt.savefig('/home/chaggar/Documents/PLOTS/free_energy.png', dpi=1000)
 plt.show()
 
 #divide elemnts by s.d of column diagonals 
@@ -225,22 +225,4 @@ plt.colorbar()
 plt.savefig('/home/chaggar/Documents/PLOTS/corr_matrix.png', dpi=1000)
 plt.show()
 
-
-# %%
-p = np.zeros([83]) + 1e-5
-mask = [25, 26, 39, 40, 66, 67, 80, 81]
-p[mask] = 0.1
-
-k = 2.93877699
-a = 9.97614925
-
-m.t = np.linspace(0,1,100)
-
-u0 = np.append(np.log(p), np.log([k, a]))
-
-sim_inf = m.forward(u0)
-plt.plot(m.t, sim_inf, c='r', alpha=0.3, linewidth=1, label='inferred')
-plt.ylabel("Protein Concentration")
-plt.xlabel("Time")
-plt.show()
 # %%
