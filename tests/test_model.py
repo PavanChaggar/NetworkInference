@@ -6,6 +6,7 @@ import os
 import numpy as np
 
 import netwin as nw
+from netwin import Model
 
 class TestModel(unittest.TestCase):
     """Class to test the Model class in _model.py
@@ -13,101 +14,107 @@ class TestModel(unittest.TestCase):
     # set root directory and path to example network
     root_dir = os.path.split(os.path.dirname(__file__))[0]
     network_path = os.path.join(root_dir, 'data/brain_networks/scale1.csv')
-    
-    # set time steps, intial condition and diffusion constant for network diffusion model
-    t = np.linspace(0, 1, 100)
-    u0 = np.ones((83))
-    k = 1.0 
-    a = 1.0
+
 
     def test_init(self):
         """Test initialisation of model class
         """
         # instantiate classw with example network and network diffusion model
-        m = nw.Model(network_path = self.network_path, model_name='network_diffusion')
-        
         # check the correct model has been assigned and that a function is returned
-        assert m.which_model == 'network_diffusion'
-        assert callable(m.f) == True
+        class test_model(Model):
+            def f(self):
+                pass
+            def solve(self):
+                pass
+            def forward(self):
+                pass
         
-        n = len(m.A)
+        m = test_model(self.network_path)
+
+        assert isinstance(m, Model) == True
+        
+        assert callable(m.f) == True
+        assert callable(m.solve) == True
+        assert callable(m.forward) == True
+
+        n = len(m.A())
         
         # test the matrices of m are all square (adjacency, degree and Laplacian) 
-        assert m.A.shape == (n,n)
-        assert m.D.shape == (n,n)
-        assert m.L.shape == (n,n)
+        assert m.A().shape == (n,n)
+        assert m.D().shape == (n,n)
+        assert m.L().shape == (n,n)
     
-    def test_models(self): 
+    
+    def test_network_diffusion(self): 
         """Test _models to assign model to f
         """
         # Instantiate class 
-        m = nw.Model(network_path = self.network_path, model_name='network_diffusion')
-        n = len(m.A)
+        m = nw.NetworkDiffusion(self.network_path)
+        n = len(m.A())
 
-        params = m.L, self.k
+        m.t = np.linspace(0, 1, 100)
+        u0 = np.ones((n))
+        k = 10.0
         
         # run simulation using f
-        u = m.f(self.u0, self.t, params)
+        u = m.f(u0, m.t, k)
 
         # check that f returns an array as expected
         assert u.shape == (n,)
-        assert np.all(u!=self.u0)
+        assert np.all(u!=u0)
 
-        m = nw.Model(network_path = self.network_path, model_name='fkpp')
-        assert m.which_model == 'fkpp' 
+        # test forward model, including ode integration using scipy
+        u0 = np.append(u0, k)
+
+        sol = m.forward(u0)
         
-        params = m.L, self.k, self.a
+        # test the shape of the solution and solution is as expected
+        assert sol.shape == (len(m.t),len(m.A()))
+        assert sol[0,:].all() == sol[-1,:].all()
+
+        # set up a different problem with non-uniform initial conditions
+        u0_2 = np.ones((len(m.A())))
+        u0_2[30] = 10.0 
+
+        u0_2 = np.append(u0_2, k)
+
+        sol_2 = m.forward(u0_2)
         
-        u2 = m.f(self.u0, self.t, params)
+        # test the solution for the two solutions are different as expected
+        assert np.all(sol[0,:]==sol_2[0,:]) == False
+        assert np.all(sol_2[0,:]!=sol_2[-1,:])
+
+    def test_network_fkpp(self): 
+
+        m = nw.NetworkFKPP(self.network_path)
+        
+        n = len(m.A())
+
+        m.t = np.linspace(0, 1, 100)
+        u0 = np.ones((n))
+        params = 10.0, 5.0
+
+        u = m.f(u0, m.t, params)
 
         # check that f returns an array as expected
-        assert u2.shape == (n,)
-        assert np.all(u2!=self.u0)
+        assert u.shape == (n,)
+        assert np.all(u!=u0)
 
-
-    def test_solve_diffusion(self): 
-        """Test solver for network diffusion model
-        """
-        #Instantiate class
-        m = nw.Model(network_path = self.network_path, model_name='network_diffusion')
-        # pack parameters and solve for initial values
-        params = m.L, self.k
-        sol = m.simulate(self.u0, self.t, params)
+        u0 = np.append(u0, params)
+        sol = m.forward(u0)
         
         # test the shape of the solution and solution is as expected
-        assert sol.shape == (len(self.t),len(m.A))
+        assert sol.shape == (len(m.t),len(m.A()))
         assert sol[0,:].all() == sol[-1,:].all()
 
         # set up a different problem with non-uniform initial conditions
-        u0_2 = np.ones((len(m.A)))
+        u0_2 = np.zeros((n))
         u0_2[30] = 10.0 
-        sol_2 = m.simulate(u0_2, self.t, params)
+        u0_2 = np.append(u0_2, params)
+        sol_2 = m.forward(u0_2)
         
         # test the solution for the two solutions are different as expected
         assert np.all(sol[0,:]==sol_2[0,:]) == False
-        assert np.all(sol_2[0,:]!=sol_2[-1,:])
-
-    def test_solve_fkpp(self): 
-        """Test solver for network fkpp model
-        """
-        #Instantiate class
-        m = nw.Model(network_path = self.network_path, model_name='fkpp')
-        # pack parameters and solve for initial values
-        params = m.L, self.k, self.a
-        sol = m.simulate(self.u0, self.t, params)
-        
-        # test the shape of the solution and solution is as expected
-        assert sol.shape == (len(self.t),len(m.A))
-        assert sol[0,:].all() == sol[-1,:].all()
-
-        # set up a different problem with non-uniform initial conditions
-        u0_2 = np.ones((len(m.A)))
-        u0_2[30] = 10.0 
-        sol_2 = m.simulate(u0_2, self.t, params)
-        
-        # test the solution for the two solutions are different as expected
-        assert np.all(sol[0,:]==sol_2[0,:]) == False
-        assert np.all(sol_2[0,:]!=sol_2[-1,:])
 
 if __name__ == '__main__':
     unittest.main()
