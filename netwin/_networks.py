@@ -2,7 +2,7 @@
 """
 import numpy as np 
 
-def adjacency_matrix(graph_path: str):
+def adjacency_matrix(graph_path):
     """Function to load graph from csv 
     args: 
         path : str
