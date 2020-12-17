@@ -46,7 +46,7 @@ class VBModel(object):
         self.__data = data 
         self.__t = model.t
         self.__init_means = init_means
-        self.__params, self.__priors = self.__vbinferenceproblem(init_means)
+        #self.__params, self.__priors = self.__vbinferenceproblem(init_means)
 
         # moments
         self.__m, self.__p, self.__c, self.__s = self.__vbsetparams(init_means)
@@ -76,8 +76,8 @@ class VBModel(object):
         p = np.linalg.inv(np.eye(len(m)) * 1e5)
         #c = np.array([priors[2]])
         #s = np.array([priors[3]])
-        c = np.array([priors[2]])
-        s = np.array([priors[3]])
+        c = np.array([1e-8])
+        s = np.array([50.0])
         return m, p, c, s
         
 
@@ -100,9 +100,9 @@ class VBModel(object):
 
         #s0 = beta_var0 / beta_mean0
         #c0 = beta_mean0**2 / beta_var0
-
         c0 = 1e-8
-        s0 = 50.0
+        s0 = 50.0 
+
 
         return m0, p0, c0, s0
 
@@ -119,7 +119,7 @@ class VBModel(object):
             F : array 
                 vector array containing free energy tracking 
         """
-        return infer(pm=self, M=self.__model, data=self.__data)
+        return vb(pm=self, M=self.__model, data=self.__data)
 
     def data(self): 
         return self.__data

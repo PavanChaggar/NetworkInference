@@ -173,7 +173,7 @@ def error_update(y, M, theta, t):
     
     return error
 
-def vb(pm, M, data, t, params, priors, n_params, n): 
+def vb11(pm, M, data, t, params, priors, n_params, n): 
     m = np.zeros((n,len(params[0])))
     p = np.zeros((n, len(params[0]), len(params[0])))
     c = np.zeros((n))
@@ -197,10 +197,10 @@ def vb(pm, M, data, t, params, priors, n_params, n):
     print('Finished!')
     return params, F
 
-def infer(pm, M, data, n): 
+def vb(pm, M, data, n=20): 
     params = pm.m(), pm.p(), pm.c(), pm.s()
     priors = pm.m0(), pm.p0(), pm.c0(), pm.s0()
-    
+
     m = np.zeros((n,len(params[0])))
     p = np.zeros((n, len(params[0]), len(params[0])))
     c = np.zeros((n))
@@ -211,7 +211,7 @@ def infer(pm, M, data, n):
         print('Iteration %d' %i)
         error = error_update(data, M, params, M.t)
 
-        J = Jacobian(M, params[0], M.t, n_params)
+        J = Jacobian(M, params[0], M.t, pm.n_params())
         params = parameter_update(error, params, priors, J)
         m[i] = params[0]
         p[i] = params[1]
