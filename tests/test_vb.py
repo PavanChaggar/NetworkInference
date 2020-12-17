@@ -5,7 +5,7 @@ import unittest
 import numpy as np
 from math import isclose
 
-from netwin import NetworkFKPP, Model, VBProblem
+from netwin import NetworkFKPP, Model, VBModel
 
 class TestVBInference(unittest.TestCase):
     """Test class for performing inference using analytic variational Bayes 
@@ -39,11 +39,11 @@ class TestVBInference(unittest.TestCase):
         p0 = np.ones([5])
         u_guess = np.append(p0, [1.0,1.0])
 
-        problem = VBProblem(model=self.m, data=self.sim, init_means=u_guess)
+        pm = VBModel(model=self.m, data=self.sim, init_means=u_guess)
 
-        assert isinstance(problem, VBProblem) == True
+        assert isinstance(pm, VBModel) == True
 
-        sol, F = problem.infer(n=20)
+        sol, F = pm.optimise(n=20)
 
         assert len(F) == 20
 
