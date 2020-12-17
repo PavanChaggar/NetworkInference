@@ -58,13 +58,13 @@ def central_difference(M, i, theta, delta, t):
 
 def Jacobian(M, theta, t, n_params):
     """Compute the Jacobian for globally defined function, f, with parameter set Theta 
-
+    
     args:
     theta : np.array, float
             parameters of global function, f
         t : np.array, float 
             time steps to evaluate at
-
+    
     returns: 
         J : np.array, float
             Jacobian vector/matrix evaluated at theta, t. 
@@ -174,6 +174,33 @@ def error_update(y, M, theta, t):
     return error
 
 def vb(pm, M, data, t, params, priors, n_params, n): 
+    m = np.zeros((n,len(params[0])))
+    p = np.zeros((n, len(params[0]), len(params[0])))
+    c = np.zeros((n))
+    s = np.zeros((n))
+    F = np.zeros((n))
+    for i in range(n):
+        #theta[i,:] = params[0]
+        print('Iteration %d' %i)
+        error = error_update(data, M, params, t)
+
+        J = Jacobian(M, params[0], t, n_params)
+        params = parameter_update(error, params, priors, J)
+        m[i] = params[0]
+        p[i] = params[1]
+        params = noise_update(error, data, params, priors, J)
+        c[i] = params[2]
+        s[i] = params[3]
+        F[i] = free_energy(data, params, priors)
+    max_F = np.argmax(F)
+    params = m[max_F], p[max_F], c[max_F], s[max_F]
+    print('Finished!')
+    return params, F
+
+def infer(pm, M, data, n): 
+    params = pm.m(), pm.p(), pm.c(), pm.s()
+    priors = pm.m0(), pm.p0(), pm.c0(), pm.s0()
+    
     m = np.zeros((n,len(params[0])))
     p = np.zeros((n, len(params[0]), len(params[0])))
     c = np.zeros((n))

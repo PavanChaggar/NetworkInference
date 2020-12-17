@@ -119,7 +119,7 @@ class VBModel(object):
             F : array 
                 vector array containing free energy tracking 
         """
-        return vb(pm=self, M=self.__model, data=self.__data, t=self.__t, params=self.__params, priors=self.__priors, n_params=self.__n_params, n=n)
+        return infer(pm=self, M=self.__model, data=self.__data)
 
     def data(self): 
         return self.__data
