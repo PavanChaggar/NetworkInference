@@ -78,6 +78,7 @@ class VBModel(object):
         #s = np.array([priors[3]])
         c = np.array([1e-8])
         s = np.array([50.0])
+
         return m, p, c, s
         
 
@@ -100,8 +101,8 @@ class VBModel(object):
 
         #s0 = beta_var0 / beta_mean0
         #c0 = beta_mean0**2 / beta_var0
-        c0 = 1e-8
-        s0 = 50.0 
+        c0 = np.array([1e-8])
+        s0 = np.array([50.0])
 
 
         return m0, p0, c0, s0
@@ -119,7 +120,7 @@ class VBModel(object):
             F : array 
                 vector array containing free energy tracking 
         """
-        return vb(pm=self, M=self.__model, data=self.__data)
+        return infer(pm=self, M=self.__model, data=self.__data)
 
     def data(self): 
         return self.__data
@@ -168,3 +169,9 @@ class VBModel(object):
 
     def F(self):
         return self.__F
+
+    def set_params(self, params) 
+        self.__m, self.__p, self.__c, self.__s = params
+        
+    def set_priors(self, priors)
+        self.__m0, self.__p0, self.__c0, self.__s0 = priors

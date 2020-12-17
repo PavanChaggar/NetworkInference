@@ -173,7 +173,7 @@ def error_update(y, M, theta, t):
     
     return error
 
-def vb11(pm, M, data, t, params, priors, n_params, n): 
+def vb(pm, M, data, t, params, priors, n_params, n): 
     m = np.zeros((n,len(params[0])))
     p = np.zeros((n, len(params[0]), len(params[0])))
     c = np.zeros((n))
@@ -197,7 +197,7 @@ def vb11(pm, M, data, t, params, priors, n_params, n):
     print('Finished!')
     return params, F
 
-def vb(pm, M, data, n=20): 
+def infer(pm, M, data, n=20): 
     params = pm.m(), pm.p(), pm.c(), pm.s()
     priors = pm.m0(), pm.p0(), pm.c0(), pm.s0()
 
