@@ -5,7 +5,7 @@ import numpy as np
 from ._model import Model
 
 class VBModel(object):
-    """Class for setting VB Model 
+    """Class for setting Inference  
     Presently implemented for VB only. 
     Will return a structured object that can be passed into 'fit' to perform variational inference
     For VB, the required arguments are: 
@@ -18,8 +18,8 @@ class VBModel(object):
     parameter values and prior distribution parameter values
     """
     def __init__(self, model=None, data=None, init_means=None, priors=None):
-        """Initialise VBProblem 
-        This sets of the VBProblem class and ensures the set up is correctly set up to interface 
+        """Initialise VBModel 
+        This sets of the VBModel class and ensures the set up is correctly set up to interface 
         with the vb protocol. 
         
         args: 
@@ -47,9 +47,16 @@ class VBModel(object):
         self.__t = model.t
         self.__init_means = init_means
         self.__params, self.__priors = self.__vbinferenceproblem(init_means)
+
+        # moments
+        self.__m, self.__p, self.__c, self.__s = self.__vbsetparams(init_means)
+        self.__m0, self.__p0, self.__c0, self.__s0 = self.__vbsetpriors(init_means)
+        
         self.__n_params = len(init_means) - len(model.L())
 
-    def __vbinferenceproblem(self, init_means, priors=None): 
+        self.__F = None
+
+    def __vbsetparams(self, init_means): 
         """ Function to set up vb inference protocol.  
         Sets up initial parameters and priors according to MVN distribution on model parameters 
         and Gamma distribution on noise. 
@@ -65,20 +72,14 @@ class VBModel(object):
             params : multidimensional array 
                      stores values for MVN and Gamma distribution priors
         """
-        if priors == None:
-            priors = self.__vbsetpriors(init_means)
-        else:
-            priors = priors
-        
         m = init_means
         p = np.linalg.inv(np.eye(len(m)) * 1e5)
         #c = np.array([priors[2]])
         #s = np.array([priors[3]])
         c = np.array([priors[2]])
         s = np.array([priors[3]])
-        params = m, p, c, s
+        return m, p, c, s
         
-        return params, priors
 
     def __vbsetpriors(self, init_means):
         """ Function to set priors based on initial means
@@ -103,10 +104,8 @@ class VBModel(object):
         c0 = 1e-8
         s0 = 50.0
 
-        priors = m0, p0, c0, s0
+        return m0, p0, c0, s0
 
-        return priors
-        
     def optimise(self, n = 10):
         """ Runs inference by calling from _vb.py 
         
@@ -120,36 +119,52 @@ class VBModel(object):
             F : array 
                 vector array containing free energy tracking 
         """
-        if self.__which_inference == 'VB': 
-            return vb(M=self.__model, data=self.__data, t=self.__t, params=self.__params, priors=self.__priors, n_params=self.__n_params, n=n)
+        return vb(pm=self, M=self.__model, data=self.__data, t=self.__t, params=self.__params, priors=self.__priors, n_params=self.__n_params, n=n)
 
-    def get(self, attribute:str):
-        """function to return values from hidden variables 
-        
-        args: 
-        attribute : string
-                    name of attribute one wishes to retrieve. 
-                    Options are: 
-                    'model'
-                    'data'
-                    'time'
-                    'init_means'
-                    'params'
-                    'priors'
-                    'n_params'
-                    'which'
+    def data(self): 
+        return self.__data
 
-        returns: 
-        attributes[arg] : argument value
-        """
-        attributes = {
-             'model': self.__model,
-              'data': self.__data,
-              'time': self.__t,
-        'init_means': self.__init_means,
-            'params': self.__params,
-            'priors': self.__priors,
-          'n_params': self.__n_params,
-             'which': self.__which_inference
-        }
-        return attributes[attribute]
+    def init_means(self):
+        return self.__init_means
+
+    def params(self):
+        return self.__params
+    
+    def priors(self):
+        return self.__priors
+
+    def n_params(self):
+        return self.__n_params
+
+    def m(self):
+        return self.__m
+    
+    def p(self):
+        return self.__p
+
+    def Cov(self):
+        return np.linalg.inv(self.__p)
+
+    def c(self):
+        return self.__c 
+    
+    def s(self):
+        return self.__s
+
+    def m0(self):
+        return self.__m0
+    
+    def p0(self):
+        return self.__p0
+
+    def Cov0(self):
+        return np.linalg.inv(self.__p0)
+
+    def c0(self):
+        return self.__c0
+    
+    def s0(self):
+        return self.__s0
+
+    def F(self):
+        return self.__F

@@ -173,7 +173,7 @@ def error_update(y, M, theta, t):
     
     return error
 
-def vb(M, data, t, params, priors, n_params, n): 
+def vb(pm, M, data, t, params, priors, n_params, n): 
     m = np.zeros((n,len(params[0])))
     p = np.zeros((n, len(params[0]), len(params[0])))
     c = np.zeros((n))
