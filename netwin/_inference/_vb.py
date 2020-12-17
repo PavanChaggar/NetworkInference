@@ -209,9 +209,9 @@ def infer(pm, M, data, n):
     for i in range(n):
         #theta[i,:] = params[0]
         print('Iteration %d' %i)
-        error = error_update(data, M, params, t)
+        error = error_update(data, M, params, M.t)
 
-        J = Jacobian(M, params[0], t, n_params)
+        J = Jacobian(M, params[0], M.t, n_params)
         params = parameter_update(error, params, priors, J)
         m[i] = params[0]
         p[i] = params[1]
