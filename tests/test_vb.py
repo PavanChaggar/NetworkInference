@@ -5,7 +5,8 @@ import unittest
 import numpy as np
 from math import isclose
 
-from netwin import NetworkFKPP, Model, VBModel
+from netwin import Model, VBModel
+from netwin.models import NetworkFKPP
 
 class TestVBInference(unittest.TestCase):
     """Test class for performing inference using analytic variational Bayes 

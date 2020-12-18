@@ -9,5 +9,3 @@ from ._model import Model
 from ._infer import VBModel
 
 from .utils import plot_nodes, plot_timeseries
-
-from ._model_library import *
