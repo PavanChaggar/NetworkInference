@@ -5,7 +5,7 @@ import unittest
 import numpy as np
 from math import isclose
 
-from netwin import Model, VBModel
+from netwin import Model, VBModel, infer
 from netwin.models import NetworkFKPP
 
 class TestVBInference(unittest.TestCase):
@@ -44,7 +44,7 @@ class TestVBInference(unittest.TestCase):
 
         assert isinstance(pm, VBModel) == True
 
-        sol, F = pm.optimise(n=20)
+        sol, F = infer(ProbModel=pm, n=20)
 
         assert len(F) == 20
 
@@ -54,4 +54,3 @@ class TestVBInference(unittest.TestCase):
 
         for i in range(len(means)):
             assert isclose(means[i],self.u0[i],abs_tol=1e-2) == True
-

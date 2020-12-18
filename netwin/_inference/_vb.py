@@ -197,7 +197,10 @@ def vb(pm, M, data, t, params, priors, n_params, n):
     print('Finished!')
     return params, F
 
-def infer(pm, M, data, n=20): 
+def fit(pm, n=20): 
+    M = pm.model()
+    data = pm.data()
+
     params = pm.m(), pm.p(), pm.c(), pm.s()
     priors = pm.m0(), pm.p0(), pm.c0(), pm.s0()
 

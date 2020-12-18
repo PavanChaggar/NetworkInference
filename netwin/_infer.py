@@ -2,7 +2,7 @@
 """
 #from netwin._inference import * 
 from netwin import Model
-from netwin._inference import infer
+from netwin._inference import fit
 import numpy as np
 #from ._model import Model
 
@@ -122,7 +122,10 @@ class VBModel(object):
             F : array 
                 vector array containing free energy tracking 
         """
-        return infer(pm=self, M=self.__model, data=self.__data)
+        return fit(pm=self)
+    
+    def model(self):
+        return self.__model
 
     def data(self): 
         return self.__data
@@ -177,3 +180,6 @@ class VBModel(object):
         
     def set_priors(self, priors):
         self.__m0, self.__p0, self.__c0, self.__s0 = priors
+
+def infer(ProbModel, n):
+    return fit(pm=ProbModel, n=n)
