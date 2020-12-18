@@ -2,7 +2,7 @@
 """
 #from netwin._inference import * 
 from netwin import Model
-from netwin._inference import fit
+from netwin._inference import vb
 import numpy as np
 from functools import singledispatch
 #from ._model import Model
@@ -52,10 +52,11 @@ class VBModel(object):
         #self.__params, self.__priors = self.__vbinferenceproblem(init_means)
 
         # moments
-        self.__m, self.__p, self.__c, self.__s = self.__vbsetparams(init_means)
-        self.__m0, self.__p0, self.__c0, self.__s0 = self.__vbsetpriors(init_means)
-        
-        self.__n_params = len(init_means) - len(model.L())
+        if isinstance(init_means, np.ndarray):
+            self.__m, self.__p, self.__c, self.__s = self.__vbsetparams(init_means)
+            self.__m0, self.__p0, self.__c0, self.__s0 = self.__vbsetpriors(init_means)
+            
+            self.__n_params = len(init_means) - len(model.L())
 
         self.__F = None
 
@@ -134,12 +135,6 @@ class VBModel(object):
     def init_means(self):
         return self.__init_means
 
-    def params(self):
-        return self.__params
-    
-    def priors(self):
-        return self.__priors
-
     def n_params(self):
         return self.__n_params
 
@@ -181,12 +176,23 @@ class VBModel(object):
         
     def set_priors(self, priors):
         self.__m0, self.__p0, self.__c0, self.__s0 = priors
+    
+    def get_priors(self):
+        return self.__m0, self.__p0, self.__c0, self.__s0 
+    
+    def set_F(self, F):
+        self.__F = F
 
 
 @singledispatch
 def infer(ProbModel=None):
-    raise NotImplementedError("Implement process function.")
+    raise NotImplementedError("Implement Probablistic Model.")
 
 @infer.register(VBModel)
 def _(ProbModel, n):
-    return fit(pm=ProbModel, n=20)
+    sol, F =  vb(pm=ProbModel, n=20)
+    pm = VBModel(model=ProbModel.model(), data=ProbModel.data())
+    pm.set_params(sol)
+    pm.set_priors(ProbModel.get_priors())
+    pm.set_F(F)
+    return pm

@@ -1,5 +1,7 @@
 # %%
 import netwin as nw 
+from netwin.models import NetworkFKPP
+from netwin import infer, VBModel
 import numpy as np 
 import matplotlib.pyplot as plt
 
@@ -11,7 +13,7 @@ np.fill_diagonal(A, 0)
 
 A = A / np.max(A)
 
-m = nw.NetworkFKPP(A)
+m = NetworkFKPP(A)
 
 p = np.random.uniform(0,0.5,5)
 
@@ -27,15 +29,16 @@ plt.show()
 p0 = np.ones([5])
 u_guess = np.append(p0, [1.0,1.0])
 
-problem = nw.VBProblem(model=m, data=sim, init_means=u_guess)
+ProbModel = VBModel(model=m, data=sim, init_means=u_guess)
 
-sol, F = problem.infer(n=20)
+pm = infer(ProbModel, n=20)
 # %%
-mean_a = np.exp(sol[0][-2:])
-cov_a = np.linalg.inv(sol[1][-2:,-2:])
+mean_a = np.exp(pm.m()[-2:])
+cov_a = pm.Cov()[-2:,-2:]
 
-samples = np.random.multivariate_normal(mean_a, cov_a, 1000)
+samples = np.random.multivariate_normal(mean_a, cov_a, 100000)
 
 (counts, x_bins, y_bins) = np.histogram2d(samples[:, 0], samples[:, 1])
 plt.contourf(counts, extent=[x_bins[0], x_bins[-1], y_bins[0], y_bins[-1]])
 plt.show()
+# %%

@@ -40,17 +40,22 @@ class TestVBInference(unittest.TestCase):
         p0 = np.ones([5])
         u_guess = np.append(p0, [1.0,1.0])
 
-        pm = VBModel(model=self.m, data=self.sim, init_means=u_guess)
+        ProbModel = VBModel(model=self.m, data=self.sim, init_means=u_guess)
 
-        assert isinstance(pm, VBModel) == True
+        assert isinstance(ProbModel, VBModel) == True
 
-        sol, F = infer(pm, n=20)
+        pm = infer(ProbModel, n=20)
+    
 
-        assert len(F) == 20
+        assert len(pm.F()) == 20
 
-        means = np.exp(sol[0])
+        means = np.exp(pm.m())
     
         assert len(means) == 7
 
         for i in range(len(means)):
             assert isclose(means[i],self.u0[i],abs_tol=1e-2) == True
+        
+        assert ProbModel.get_priors() == pm.get_priors()
+
+        assert isinstance(pm.model(), Model) == True
