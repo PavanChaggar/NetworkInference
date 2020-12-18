@@ -44,7 +44,7 @@ class TestVBInference(unittest.TestCase):
 
         assert isinstance(pm, VBModel) == True
 
-        sol, F = infer(ProbModel=pm, n=20)
+        sol, F = infer(pm, n=20)
 
         assert len(F) == 20
 

@@ -4,6 +4,7 @@
 from netwin import Model
 from netwin._inference import fit
 import numpy as np
+from functools import singledispatch
 #from ._model import Model
 
 class VBModel(object):
@@ -181,5 +182,11 @@ class VBModel(object):
     def set_priors(self, priors):
         self.__m0, self.__p0, self.__c0, self.__s0 = priors
 
-def infer(ProbModel, n):
-    return fit(pm=ProbModel, n=n)
+
+@singledispatch
+def infer(ProbModel=None):
+    raise NotImplementedError("Implement process function.")
+
+@infer.register(VBModel)
+def _(ProbModel, n):
+    return fit(pm=ProbModel, n=20)

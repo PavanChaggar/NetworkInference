@@ -39,4 +39,3 @@ samples = np.random.multivariate_normal(mean_a, cov_a, 1000)
 (counts, x_bins, y_bins) = np.histogram2d(samples[:, 0], samples[:, 1])
 plt.contourf(counts, extent=[x_bins[0], x_bins[-1], y_bins[0], y_bins[-1]])
 plt.show()
-# %%
