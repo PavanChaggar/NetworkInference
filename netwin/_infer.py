@@ -1,8 +1,10 @@
 """script containing classe/functions for inference methods
 """
-from netwin._inference import * 
+#from netwin._inference import * 
+from netwin import Model
+from netwin._inference import infer
 import numpy as np
-from ._model import Model
+#from ._model import Model
 
 class VBModel(object):
     """Class for setting Inference  
@@ -170,8 +172,8 @@ class VBModel(object):
     def F(self):
         return self.__F
 
-    def set_params(self, params) 
+    def set_params(self, params): 
         self.__m, self.__p, self.__c, self.__s = params
         
-    def set_priors(self, priors)
+    def set_priors(self, priors):
         self.__m0, self.__p0, self.__c0, self.__s0 = priors

@@ -6,7 +6,7 @@ from ._networks import graph_Laplacian
 
 from ._model import Model
 
-from ._infer import *
+from ._infer import VBModel
 
 from .utils import plot_nodes, plot_timeseries
 
