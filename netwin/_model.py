@@ -98,7 +98,7 @@ class Model(ABC):
         return self.__A 
     
     def D(self):
-    """Return the degree matrix associated with the model.
+        """Return the degree matrix associated with the model.
 
         Returns:
             D : numpy array
