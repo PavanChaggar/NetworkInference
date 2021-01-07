@@ -4,6 +4,8 @@ env/
 
 netwin/__pycache__/
 
+netwin/models/__pycache__/
+
 netwin/_inference/__pycache__/
 
 tests/__pycache__/

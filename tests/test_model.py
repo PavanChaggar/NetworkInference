@@ -7,6 +7,7 @@ import numpy as np
 
 import netwin as nw
 from netwin import Model
+from netwin.models import NetworkDiffusion, NetworkFKPP
 
 class TestModel(unittest.TestCase):
     """Class to test the Model class in _model.py
@@ -49,7 +50,7 @@ class TestModel(unittest.TestCase):
         """Test _models to assign model to f
         """
         # Instantiate class 
-        m = nw.NetworkDiffusion(self.network_path)
+        m = NetworkDiffusion(self.network_path)
         n = len(m.A())
 
         m.t = np.linspace(0, 1, 100)
@@ -86,7 +87,7 @@ class TestModel(unittest.TestCase):
 
     def test_network_fkpp(self): 
 
-        m = nw.NetworkFKPP(self.network_path)
+        m = NetworkFKPP(self.network_path)
         
         n = len(m.A())
 

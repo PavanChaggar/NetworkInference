@@ -58,13 +58,13 @@ def central_difference(M, i, theta, delta, t):
 
 def Jacobian(M, theta, t, n_params):
     """Compute the Jacobian for globally defined function, f, with parameter set Theta 
-
+    
     args:
     theta : np.array, float
             parameters of global function, f
         t : np.array, float 
             time steps to evaluate at
-
+    
     returns: 
         J : np.array, float
             Jacobian vector/matrix evaluated at theta, t. 
@@ -173,7 +173,28 @@ def error_update(y, M, theta, t):
     
     return error
 
-def vb(M, data, t, params, priors, n_params, n): 
+def vb(pm, n=20): 
+    """Performs variational Bayes optimisation on probabalistic model
+
+    Args:
+         pm : VBModel
+              probablistic model implemented using VBModel class
+          n : int 
+              number of iterations of optimisation. Defaults to 20.
+
+    Returns:
+     params : tuple
+              tuple containg optimised parameters for MVN and Gamma 
+              distributions
+        F   : array
+              array containing the free energy for each VB update step
+    """
+    M = pm.model()
+    data = pm.data()
+
+    params = pm.m(), pm.p(), pm.c(), pm.s()
+    priors = pm.m0(), pm.p0(), pm.c0(), pm.s0()
+
     m = np.zeros((n,len(params[0])))
     p = np.zeros((n, len(params[0]), len(params[0])))
     c = np.zeros((n))
@@ -182,9 +203,9 @@ def vb(M, data, t, params, priors, n_params, n):
     for i in range(n):
         #theta[i,:] = params[0]
         print('Iteration %d' %i)
-        error = error_update(data, M, params, t)
+        error = error_update(data, M, params, M.t)
 
-        J = Jacobian(M, params[0], t, n_params)
+        J = Jacobian(M, params[0], M.t, pm.n_params())
         params = parameter_update(error, params, priors, J)
         m[i] = params[0]
         p[i] = params[1]
