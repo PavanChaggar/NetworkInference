@@ -2,6 +2,7 @@
 import netwin as nw 
 from netwin.models import NetworkFKPP
 from netwin import infer, VBModel
+
 import numpy as np 
 import matplotlib.pyplot as plt
 
