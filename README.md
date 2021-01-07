@@ -7,6 +7,3 @@ The current goals are to implement:
 - [ ] Perform inference using sampling methods such as Markov chain Monte Carlo (MCMC), variational inference and simulation based inference. 
 - [ ] Compare the efficacy and efficiency of these algorithms with variably sized free parameter sets and network sizes. 
 
-
-
-At present, the project will be implemented in python, making use of PyMC3 and SBI. In future, we hope to move to a Julia or C++ implementation, that are likely to scale more efficiently than python implementations. 
