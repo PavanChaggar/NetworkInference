@@ -80,11 +80,29 @@ class Model(ABC):
         raise NotImplementedError('This should be implemented')
     
     def L(self):
+        """Return the Laplacian matrix associated with the model.
+
+        Returns:
+            L : numpy array
+                n x n Laplacian Matrix
+        """
         return self.__L
 
     def A(self):
+        """Return the adjency matrix associated with the model.
+
+        Returns:
+            A : numpy array
+                n x n adjacency Matrix
+        """
         return self.__A 
     
     def D(self):
+    """Return the degree matrix associated with the model.
+
+        Returns:
+            D : numpy array
+                n x n Degree Matrix
+        """
         return self.__D 
 

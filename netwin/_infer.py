@@ -127,69 +127,144 @@ class VBModel(object):
         return fit(pm=self)
     
     def model(self):
+        """return forward model
+        """
         return self.__model
 
     def data(self): 
+        """Return data
+        """
         return self.__data
 
     def init_means(self):
+        """Return initial means
+        """
         return self.__init_means
 
     def n_params(self):
+        """Return number of ode model parameters
+        """
         return self.__n_params
 
     def m(self):
+        """Return vector of means of MVN distribution
+        """
         return self.__m
     
     def p(self):
+        """Return precision matrix for MVN diistribution
+        """
         return self.__p
 
     def Cov(self):
+        """return Covariance matrix for MVN distribution
+        """
         return np.linalg.inv(self.__p)
 
     def c(self):
+        """return shape parameters for Gamma distribution
+        """
         return self.__c 
     
     def s(self):
+        """Return scale parameters for Gamma distribution
+        """
         return self.__s
 
     def m0(self):
+        """Return prior on means for MVN distribution
+        """
         return self.__m0
     
     def p0(self):
+        """Return prior on precision matrix for MVN distribution
+        """
         return self.__p0
 
     def Cov0(self):
+        """Return the prior covariance matrix for the MVN distribution
+        """
         return np.linalg.inv(self.__p0)
 
     def c0(self):
+        """Return the prior on the shape parameter for the Gamma distribution
+        """
         return self.__c0
     
     def s0(self):
+        """Return the prior on the scale parameters for the Gamma distribution
+        """
         return self.__s0
 
     def F(self):
+        """Return array of free energy for n iterations
+        """
         return self.__F
 
     def set_params(self, params): 
+        """Set the parameters of a VBModel
+
+        Args:
+            params : tuple
+                     containing values for m, p, c and s. Can be obtained using
+                     get_priors or a solution to infer for VBModel
+        """
         self.__m, self.__p, self.__c, self.__s = params
         
     def set_priors(self, priors):
+        """Set the priors of a VBModel
+
+        Args: 
+            priors : tuple
+                     tuple containing values for m, p, c, s
+        """
         self.__m0, self.__p0, self.__c0, self.__s0 = priors
     
     def get_priors(self):
+        """Return tuple of priors
+
+        Returns:
+            priors: tuple
+                    tuple of priors m0, p0, c0, and s0. 
+        """
         return self.__m0, self.__p0, self.__c0, self.__s0 
     
     def set_F(self, F):
+        """Set the value of F for the VBModel
+
+        Args:
+            F : array
+                Array containing free energy for each iteration of VB update
+        """
         self.__F = F
 
 
 @singledispatch
 def infer(ProbModel=None):
+    """Base generic function for infer
+
+    Args:
+        ProbModel : Defaults to None.
+
+    Raises:
+        NotImplementedError: Make sure the corrext model type is entered
+    """
     raise NotImplementedError("Implement Probablistic Model.")
 
 @infer.register(VBModel)
 def _(ProbModel, n):
+    """Perform VB optimisation on VBModel
+
+    Args:
+        ProbModel : VBModel
+                    class object implemented with VBModel 
+                n : int
+                    number of iterations for VB updates 
+
+    Returns:
+        Solution : VBModel
+                   Optimised ProbModel object using Variational Bayes
+    """
     sol, F =  vb(pm=ProbModel, n=20)
     pm = VBModel(model=ProbModel.model(), data=ProbModel.data())
     pm.set_params(sol)
