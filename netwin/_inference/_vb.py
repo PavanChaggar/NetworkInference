@@ -174,6 +174,21 @@ def error_update(y, M, theta, t):
     return error
 
 def vb(pm, n=20): 
+    """Performs variational Bayes optimisation on probabalistic model
+
+    Args:
+         pm : VBModel
+              probablistic model implemented using VBModel class
+          n : int 
+              number of iterations of optimisation. Defaults to 20.
+
+    Returns:
+     params : tuple
+              tuple containg optimised parameters for MVN and Gamma 
+              distributions
+        F   : array
+              array containing the free energy for each VB update step
+    """
     M = pm.model()
     data = pm.data()
 
