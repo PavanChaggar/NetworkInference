@@ -1,23 +1,21 @@
-.. Root of all pints docs
+.. Network Inference documentation master file, created by
+   sphinx-quickstart on Mon Jan 11 14:25:03 2021.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
 
-.. _GitHub: https://github.com/PavanChaggar/NetworkInference
-
-.. module:: netwin
+Welcome to Network Inference's documentation!
+=============================================
 
 .. toctree::
-    :hidden:
-    :maxdepth: 1
+   :maxdepth: 2
+   :caption: Contents:
 
-    model
+   Model
 
 
-Welcome to the documentation for NetworkInference
-=====================================
+Indices and tables
+==================
 
-**NetworkInference** is a repository hosted on GitHub_, which enables users to perform Bayesian
-inference for dynamical system model on networks. 
-
-At present, the software is capable of performing inference using analyatic variational Bayes.
-
-This page provides the API, or developer documentation for
-`NetworkInference`.
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
