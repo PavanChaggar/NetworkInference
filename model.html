@@ -56,7 +56,6 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Content with notebooks" href="notebooks.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -89,29 +88,19 @@
     <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="intro.html">
-   Welcome to your Jupyter Book
+   Network Inference
   </a>
  </li>
 </ul>
-<ul class="current nav sidenav_l1">
- <li class="toctree-l1 current active collapsible-parent">
-  <a class="reference internal" href="content.html">
-   Content in Jupyter Book
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Tutorials.html">
+   Tutorials
   </a>
-  <ul class="current collapse-ul">
+  <ul class="collapse-ul">
    <li class="toctree-l2">
-    <a class="reference internal" href="markdown.html">
-     Markdown Files
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="notebooks.html">
-     Content with notebooks
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Models
+    <a class="reference internal" href="InferenceTutorial.html">
+     Network Inference Tutorial
     </a>
    </li>
   </ul>
@@ -230,72 +219,45 @@
 <dl class="py class">
 <dt id="netwin.Model">
 <em class="property">class </em><code class="sig-prename descclassname">netwin.</code><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network_path</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#netwin.Model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Model class for the easy implementation of network models</p>
+<dd><p>Abstract Base Class for implementing dynamical network models.</p>
+<dl class="simple">
+<dt>network_path (str)</dt><dd><p>path to a network array, .csv, or .graphml</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="netwin.Model.A">
 <code class="sig-name descname">A</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#netwin.Model.A" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the adjency matrix associated with the model.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><dl class="simple">
-<dt>A<span class="classifier">numpy array</span></dt><dd><p>n x n adjacency Matrix</p>
-</dd>
-</dl>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="netwin.Model.D">
 <code class="sig-name descname">D</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#netwin.Model.D" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the degree matrix associated with the model.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><dl class="simple">
-<dt>D<span class="classifier">numpy array</span></dt><dd><p>n x n Degree Matrix</p>
-</dd>
-</dl>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="netwin.Model.L">
 <code class="sig-name descname">L</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#netwin.Model.L" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the Laplacian matrix associated with the model.</p>
-<dl class="simple">
-<dt>Returns:</dt><dd><dl class="simple">
-<dt>L<span class="classifier">numpy array</span></dt><dd><p>n x n Laplacian Matrix</p>
-</dd>
-</dl>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="netwin.Model.f">
 <em class="property">abstract </em><code class="sig-name descname">f</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#netwin.Model.f" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function set to be the model implemented
-args:</p>
-<blockquote>
-<div><dl class="simple">
-<dt>u0<span class="classifier">array  </span></dt><dd><p>array containing intial conditions</p>
+<dd><p>Differential equation function to be implemented</p>
+<dl>
+<dt>u0 (array)</dt><dd><p>array containing intial conditions</p>
 </dd>
-<dt>t<span class="classifier">array</span></dt><dd><p>numpy array containing time steps at which to evaluate model
+<dt>t (array)</dt><dd><p>numpy array containing time steps at which to evaluate model
 e.g. t = np.linespace(0, 1, 100)</p>
 </dd>
-</dl>
-</div></blockquote>
-<dl>
-<dt>params<span class="classifier">array </span></dt><dd><p>array containing parameter values
+<dt>params (array)</dt><dd><p>array containing parameter values
 e.g. params = [L, k]</p>
 <blockquote>
-<div><p>L = Graph Laplacian 
+<div><p>L = Graph Laplacian
 k = diffusion coefficient</p>
 </div></blockquote>
-</dd>
-<dt>returns: </dt><dd><dl class="simple">
-<dt>u<span class="classifier">array </span></dt><dd><p>solution to differential equation at times t</p>
-</dd>
-</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -303,31 +265,13 @@ k = diffusion coefficient</p>
 <dl class="py method">
 <dt id="netwin.Model.forward">
 <em class="property">abstract </em><code class="sig-name descname">forward</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#netwin.Model.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to describt ehf forward model
-args:</p>
-<blockquote>
-<div><blockquote>
-<div><dl>
-<dt>u0<span class="classifier">array  </span></dt><dd><blockquote>
-<div><p>array containing intial conditions</p>
-</div></blockquote>
+<dd><p>Function to describt ehf forward model</p>
 <dl class="simple">
-<dt>t<span class="classifier">arrau </span></dt><dd><p>arrau containing time steps at which to evaluate model</p>
+<dt>u0 (array)</dt><dd><p>array containing intial conditions</p>
 </dd>
-</dl>
+<dt>t (array)</dt><dd><p>arrau containing time steps at which to evaluate model</p>
 </dd>
-</dl>
-</div></blockquote>
-<dl class="simple">
-<dt>params<span class="classifier">array </span></dt><dd><p>array containing parameter values</p>
-</dd>
-</dl>
-</div></blockquote>
-<dl class="simple">
-<dt>returns: </dt><dd><dl class="simple">
-<dt>u<span class="classifier">array </span></dt><dd><p>solution to differential equation at times t</p>
-</dd>
-</dl>
+<dt>params (array)</dt><dd><p>array containing parameter values</p>
 </dd>
 </dl>
 </dd></dl>
@@ -335,31 +279,13 @@ args:</p>
 <dl class="py method">
 <dt id="netwin.Model.solve">
 <em class="property">abstract </em><code class="sig-name descname">solve</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#netwin.Model.solve" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to use odeint to sovle network model in f
-args:</p>
-<blockquote>
-<div><blockquote>
-<div><dl>
-<dt>u0<span class="classifier">array  </span></dt><dd><blockquote>
-<div><p>array containing intial conditions</p>
-</div></blockquote>
+<dd><p>Function to use odeint to sovle network model in f</p>
 <dl class="simple">
-<dt>t<span class="classifier">arrau </span></dt><dd><p>arrau containing time steps at which to evaluate model</p>
+<dt>u0 (array)</dt><dd><p>array containing intial conditions</p>
 </dd>
-</dl>
+<dt>t (array)</dt><dd><p>array containing time steps at which to evaluate model</p>
 </dd>
-</dl>
-</div></blockquote>
-<dl class="simple">
-<dt>params<span class="classifier">array </span></dt><dd><p>array containing parameter values</p>
-</dd>
-</dl>
-</div></blockquote>
-<dl class="simple">
-<dt>returns: </dt><dd><dl class="simple">
-<dt>u<span class="classifier">array </span></dt><dd><p>solution to differential equation at times t</p>
-</dd>
-</dl>
+<dt>params (array)</dt><dd><p>array containing parameter values</p>
 </dd>
 </dl>
 </dd></dl>
@@ -397,7 +323,6 @@ args:</p>
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="notebooks.html" title="previous page">Content with notebooks</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
