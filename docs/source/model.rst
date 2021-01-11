@@ -4,6 +4,11 @@
 Models
 *********
 
+.. currentmodule:: netwin
+
 Base classes
 ------------
 - :class:`Model`
+
+.. automodule:: netwin.Model
+    :members:
