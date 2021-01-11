@@ -1,4 +1,4 @@
-.. _NetworkInference: https://networkinference.readthedocs.io/en/latest/
+.. _netwin: https://networkinference.readthedocs.io/en/latest/
 
 *********
 Models
@@ -9,3 +9,6 @@ Models
 Base classes
 ------------
 - :class:`Model`
+
+.. autoclass:: Model
+    :members:
