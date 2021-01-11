@@ -13,11 +13,11 @@ setup(
         'numpy',
         'matplotlib',
         'scipy',
-        'networkx',
+        #'networkx',
         'pandas',
         'plotly',
         #'torch',
-        'nilearn',
+        #'nilearn',
         #'sbi',
     ],
     extras_require={
