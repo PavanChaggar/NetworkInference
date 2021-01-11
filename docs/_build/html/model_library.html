@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>API &#8212; My sample book</title>
+    <title>Model Library &#8212; My sample book</title>
     
   <link rel="stylesheet" href="_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
@@ -147,9 +147,9 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/content.md"><button type="button"
+        <a class="dropdown-buttons" href="_sources/model_library.rst"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
+                data-placement="left">.rst</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
             onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
@@ -167,7 +167,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fcontent.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fmodel_library.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -188,6 +188,25 @@
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
         
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#network-diffusion">
+   Network Diffusion
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#network-fkpp">
+   Network FKPP
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
     </div>
 </div>
     <div id="main-content" class="row">
@@ -195,9 +214,121 @@
         
               <div>
                 
-  <div class="section" id="api">
-<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
-<p>Here lives the API documentation for NetworkInference, produced using sphinx.</p>
+  <div class="section" id="model-library">
+<h1>Model Library<a class="headerlink" href="#model-library" title="Permalink to this headline">¶</a></h1>
+<p>This page contains documentation for the models already implemented within
+Network Inference. At present, these include network diffusion and the network
+Fisher-Kolmogorov–Petrovsky–Piskunov equation.</p>
+<div class="section" id="network-diffusion">
+<h2>Network Diffusion<a class="headerlink" href="#network-diffusion" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkDiffusion</span></code></p></li>
+</ul>
+<dl class="py class">
+<dt id="netwin.models.NetworkDiffusion">
+<em class="property">class </em><code class="sig-prename descclassname">netwin.models.</code><code class="sig-name descname">NetworkDiffusion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network_path</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#netwin.models.NetworkDiffusion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Network Diffusion model instantiation of the Model class</p>
+<dl class="simple">
+<dt>Model (class)</dt><dd><p>abstract base class for forward models</p>
+</dd>
+<dt>Path (str)</dt><dd><p>string to the csv corresponding to the network A matrix.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="netwin.models.NetworkDiffusion.f">
+<code class="sig-name descname">f</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">theta</span></em><span class="sig-paren">)</span><a class="headerlink" href="#netwin.models.NetworkDiffusion.f" title="Permalink to this definition">¶</a></dt>
+<dd><p>Differential equation model for network diffusion</p>
+<dl class="simple">
+<dt>p (array)</dt><dd><p>protein concentration</p>
+</dd>
+<dt>t (array)</dt><dd><p>array of time points to evlulate at t</p>
+</dd>
+<dt>theta (array)</dt><dd><p>model parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="netwin.models.NetworkDiffusion.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">u0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#netwin.models.NetworkDiffusion.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>forward model taking in free parameters and returning simulated
+data</p>
+<dl class="simple">
+<dt>u0 (array)</dt><dd><p>initial values for protein concentration vector and model parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="netwin.models.NetworkDiffusion.solve">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">theta</span></em><span class="sig-paren">)</span><a class="headerlink" href="#netwin.models.NetworkDiffusion.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>numerical integration of ode model</p>
+<dl class="simple">
+<dt>p (array)</dt><dd><p>protein concentration vector</p>
+</dd>
+<dt>theta (array)</dt><dd><p>model parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="network-fkpp">
+<h2>Network FKPP<a class="headerlink" href="#network-fkpp" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkFKPP</span></code></p></li>
+</ul>
+<dl class="py class">
+<dt id="id0">
+<em class="property">class </em><code class="sig-prename descclassname">netwin.models.</code><code class="sig-name descname">NetworkDiffusion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">network_path</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Network Diffusion model instantiation of the Model class</p>
+<dl class="simple">
+<dt>Model (class)</dt><dd><p>abstract base class for forward models</p>
+</dd>
+<dt>Path (str)</dt><dd><p>string to the csv corresponding to the network A matrix.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="id1">
+<code class="sig-name descname">f</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">theta</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Differential equation model for network diffusion</p>
+<dl class="simple">
+<dt>p (array)</dt><dd><p>protein concentration</p>
+</dd>
+<dt>t (array)</dt><dd><p>array of time points to evlulate at t</p>
+</dd>
+<dt>theta (array)</dt><dd><p>model parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id2">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">u0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<dd><p>forward model taking in free parameters and returning simulated
+data</p>
+<dl class="simple">
+<dt>u0 (array)</dt><dd><p>initial values for protein concentration vector and model parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id3">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">theta</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<dd><p>numerical integration of ode model</p>
+<dl class="simple">
+<dt>p (array)</dt><dd><p>protein concentration vector</p>
+</dd>
+<dt>theta (array)</dt><dd><p>model parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 </div>
 
     <script type="text/x-thebe-config">

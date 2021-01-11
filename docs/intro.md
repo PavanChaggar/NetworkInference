@@ -1,7 +1,7 @@
-Welcome to your Jupyter Book
-============================
+Network Inference
+=================
 
-This is a small sample book to give you a feel for how book content is
-structured.
+This book contains documentation for the NetworkInference. NetworkInfernece is a
+package for simulating and performing inference on dynamical network models.
 
-Check out the content pages bundled with this sample book to get started.
+Check out the API page to get started.

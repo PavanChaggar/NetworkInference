@@ -2,8 +2,10 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 #
 - file: intro
-- file: content
+- file: API
   sections:
-    - file: markdown
-    - file: notebooks
+    - file: model_library
     - file: model
+- file: Tutorials
+  sections:
+    - file: InferenceTutorial
