@@ -7,9 +7,6 @@ Welcome to Network Inference's documentation!
 =============================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
    model
 
 
