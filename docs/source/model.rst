@@ -10,5 +10,5 @@ Base classes
 ------------
 - :class:`Model`
 
-.. autoclass:: Model
+.. automodule:: netwin.Model
     :members:
