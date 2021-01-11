@@ -2,12 +2,13 @@
 
 .. _GitHub: https://github.com/PavanChaggar/NetworkInference
 
-.. module:: NetworkInference
+.. module:: netwin
 
 .. toctree::
     :hidden:
     :maxdepth: 1
 
+    model
 
 
 Welcome to the documentation for NetworkInference
