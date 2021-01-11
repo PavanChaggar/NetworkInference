@@ -4,7 +4,7 @@
 Models
 *********
 
-.. currentmodule:: NetworkInference
+.. currentmodule:: netwin
 
 Base classes
 ------------

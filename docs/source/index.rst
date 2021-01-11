@@ -2,7 +2,7 @@
 
 .. _GitHub: https://github.com/PavanChaggar/NetworkInference
 
-.. module:: NetworkInference
+.. module:: netwin
 
 .. toctree::
     :hidden:
