@@ -12,6 +12,3 @@ Base classes
 
 .. autoclass:: Model
     :members:
-
-.. autoclass:: VBModel
-    :members:
