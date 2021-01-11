@@ -7,6 +7,3 @@ Models
 Base classes
 ------------
 - :class:`Model`
-
-.. autoclass:: netwin.Model
-    :members:
