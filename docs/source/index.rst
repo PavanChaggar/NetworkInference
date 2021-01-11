@@ -10,7 +10,7 @@ Welcome to Network Inference's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   Model
+   model
 
 
 Indices and tables
