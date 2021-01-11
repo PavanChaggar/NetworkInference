@@ -1,10 +1,10 @@
-.. _netwin: https://networkinference.readthedocs.io/en/latest/
+.. _NetworkInference: https://networkinference.readthedocs.io/en/latest/
 
 *********
 Models
 *********
 
-.. currentmodule:: netwin
+.. currentmodule:: NetworkInference
 
 Base classes
 ------------
