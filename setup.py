@@ -16,9 +16,9 @@ setup(
         'networkx',
         'pandas',
         'plotly',
-        'torch',
+        #'torch',
         'nilearn',
-        'sbi',
+        #'sbi',
     ],
     extras_require={
         'docs': [
