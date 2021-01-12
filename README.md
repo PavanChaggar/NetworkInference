@@ -7,3 +7,4 @@ The current goals are to implement:
 - [ ] Perform inference using sampling methods such as Markov chain Monte Carlo (MCMC), variational inference and simulation based inference. 
 - [ ] Compare the efficacy and efficiency of these algorithms with variably sized free parameter sets and network sizes. 
 
+Work in progress documentation can be found [here](https://pavanchaggar.github.io/NetworkInference/intro.html)
