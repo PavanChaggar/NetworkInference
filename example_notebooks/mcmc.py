@@ -7,11 +7,11 @@ def f(theta):
     return a * np.exp(-b * t)
 # %%
 theta = [9, 2]
-sigma = 2
+sigma = 1
 n = 100
 t = np.linspace(0, 2, n)
 
-data = f(theta) 
+data = f(theta) + np.random.normal(0, sigma, n)
 # %%
 def make_log_normallikelihood(f, data, sigma, theta=None):
     def log_normallikelihood(theta):
@@ -60,9 +60,9 @@ def mh(theta, min,max, samples, log_likelihood):
 # %%
 min = [1e-5, 1e-5]
 max = [10,10]
-result = mh(theta=theta, min=min, max=max, samples=20000, log_likelihood=likelihood)
-plt.plot(result[:,0])# %%
+result = mh(theta=[0,0], min=min, max=max, samples=20000, log_likelihood=likelihood)
+plt.plot(result[2000:,0])# %%
 plt.show()
-plt.hist(result[:,0],100)
+plt.hist(result[2000:,0],100)
 plt.show()
 # %%
