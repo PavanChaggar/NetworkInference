@@ -3,6 +3,7 @@
 import pandas as pd 
 import numpy as np 
 import plotly.graph_objs as go
+from plotly.subplots import make_subplots
 import matplotlib.pyplot as plt
 
 def get_nodes(scale):
@@ -82,3 +83,55 @@ def plot_timeseries(data, time_interval, colours=['g'], alpha=[0.5]):
             plt.plot(time_interval, x[:,j], c=colours[i], alpha=alpha[i])
 
     return ax.show()
+
+def contour_2dmvn(means, cov, n):
+    samples = np.random.multivariate_normal(means, cov, n)
+    (counts, x_bins, y_bins) = np.histogram2d(samples[:, 0], samples[:, 1])
+
+    fig = go.Figure(data =
+        go.Contour(
+            z=counts,
+            x=x_bins, # horizontal axis
+            y=y_bins# vertical axis
+        ))
+    return fig.show()
+
+def barplot_concentrations(true, inferred, opacity=0.7):
+    fig = go.Figure(data=[
+        go.Bar(name='True', x=np.arange(len(true)), y=true, opacity=opacity),
+        go.Bar(name='Inferred', x=np.arange(len(inferred)), y=inferred, opacity=opacity)
+    ])
+    # Change the bar mode
+    fig.update_layout(barmode='group')
+    return fig.show()
+
+def plot_2dmvn(means, cov, n=10000):
+    samples = np.random.multivariate_normal(means, cov, n)
+    (counts, x_bins, y_bins) = np.histogram2d(samples[:, 0], samples[:, 1])
+
+    fig = make_subplots(rows=2, cols=2, column_widths=[0.8,0.2], row_heights=[0.2,0.8])
+
+    fig.add_trace(
+        go.Contour(
+            z=counts,
+            x=x_bins, # horizontal axis
+            y=y_bins,# vertical axis
+            showlegend=False,
+            showscale=False,
+        ),
+        row=2, col=1
+    )
+
+    fig.add_trace(
+        go.Histogram(x=samples[:,0],showlegend=False),
+        row=1, col=1
+    )
+
+
+    fig.add_trace(
+        go.Histogram(y=samples[:,1],showlegend=False),
+        row=2, col=2
+    )
+
+    fig.update_layout(height=600, width=600)
+    return fig.show()

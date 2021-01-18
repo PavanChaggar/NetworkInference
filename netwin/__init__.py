@@ -8,4 +8,4 @@ from ._model import Model
 
 from ._infer import VBModel, infer
 
-from .utils import plot_nodes, plot_timeseries
+from .utils import plot_nodes, plot_timeseries, plot_2dmvn, barplot_concentrations
