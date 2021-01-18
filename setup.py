@@ -19,5 +19,6 @@ setup(
         'torch',
         'nilearn',
         'sbi',
+        'jupyter-book',
     ],
 )
