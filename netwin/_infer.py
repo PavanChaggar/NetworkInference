@@ -252,7 +252,7 @@ def infer(ProbModel=None):
     raise NotImplementedError("Implement Probablistic Model.")
 
 @infer.register(VBModel)
-def _(ProbModel, n):
+def _(ProbModel, n=20):
     """Perform VB optimisation on VBModel
 
     Args:
@@ -265,7 +265,7 @@ def _(ProbModel, n):
         Solution : VBModel
                    Optimised ProbModel object using Variational Bayes
     """
-    sol, F =  vb(pm=ProbModel, n=20)
+    sol, F =  vb(pm=ProbModel, n=n)
     pm = VBModel(model=ProbModel.model(), data=ProbModel.data())
     pm.set_params(sol)
     pm.set_priors(ProbModel.get_priors())
