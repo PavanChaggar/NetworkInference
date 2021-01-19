@@ -105,6 +105,7 @@ class VBModel(object):
 
         #s0 = beta_var0 / beta_mean0
         #c0 = beta_mean0**2 / beta_var0
+        # c shape, s = scale
         c0 = np.array([1e-8])
         s0 = np.array([50.0])
 
