@@ -173,7 +173,7 @@ def error_update(y, M, theta, t):
     
     return error
 
-def vb(pm, n=20): 
+def vb(pm, verbose=False, n=20): 
     """Performs variational Bayes optimisation on probabalistic model
 
     Args:
@@ -202,7 +202,8 @@ def vb(pm, n=20):
     F = np.zeros((n))
     for i in range(n):
         #theta[i,:] = params[0]
-        print('Iteration %d' %i)
+        if verbose:
+            print('Iteration %d' %i)
         error = error_update(data, M, params, M.t)
 
         J = Jacobian(M, params[0], M.t, pm.n_params())
