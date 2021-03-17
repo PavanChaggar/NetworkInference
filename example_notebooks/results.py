@@ -11,7 +11,7 @@ import matplotlib as mpl
 %autoreload 2
 # %%
 result =[]
-path = '/home/chaggar/Documents/Network_Inference/subjects/'
+path = '/home/chaggar/Documents/Connectomes/standard_connectome/scale1/subjects'
 for root, dirs, files in os.walk(path):
     for name in files:
         if fnmatch.fnmatch(name, 'fdt_network_matrix'):

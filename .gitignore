@@ -17,8 +17,5 @@ example_notebooks/__pycache__/
 #vscode 
 .vscode/
 
-#data 
-subjects/
-
 #sbi 
 example_notebooks/sbi-logs/
